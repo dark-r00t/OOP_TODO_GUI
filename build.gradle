@@ -24,3 +24,7 @@ javafx {
 test {
     useJUnitPlatform()
 }
+
+application{
+    mainClassName 'ucf.assignments.ToDo'
+}
