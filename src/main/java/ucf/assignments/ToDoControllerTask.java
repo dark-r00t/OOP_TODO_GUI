@@ -7,7 +7,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-public class ToDoController {
+public class ToDoControllerTask {
     public SplitPane mainPane;
     public SplitPane splitPane;
     public TextField descriptionTaskTextBox;
@@ -17,11 +17,10 @@ public class ToDoController {
     public ListView taskList;
 
     // on open delete data in temp.txt
-
-    // create string for listClicked
-    // create a string array list of size 100
-
+    // create string for taskClicked
+    // create linked list of ToDoItem objects
     // define a global variable for the user directory
+
     public void specificUserDirec(String userDirec) {
         // modify userDirec so that it's in a specific file path [i.e. To-Do saves]
 
@@ -29,7 +28,7 @@ public class ToDoController {
     }
 
     public void listClicked(MouseEvent mouseEvent) {
-        // change string ListClicked to list's data
+        // change string taskClicked to list's data
 
 
     }
@@ -41,10 +40,7 @@ public class ToDoController {
     }
 
     public void displayAll() {
-        // open temp.txt
-        // get data from temp.txt and store into list
-        // close temp.txt
-        // display list
+        // display data from linked list
 
 
     }
@@ -56,10 +52,9 @@ public class ToDoController {
     }
 
     public void displayCompleted() {
-        // get data from temp.txt
-        // look for -#&^C at the end of the string
-        // store data into the string array
-        // display string array
+        // make a new linked list
+        // run loop adding every item marked as complete into new linked list
+        // display linked list
 
 
     }
@@ -71,10 +66,9 @@ public class ToDoController {
     }
 
     public void displayIncomplete() {
-        // get data from temp.txt
-        // look for data w/o -#&^C at the end of the string
-        // store data into the string array
-        // display string array
+        // make a new linked list
+        // run loop adding every item marked as incomplete into new linked list
+        // display linked list
 
 
     }
@@ -86,11 +80,9 @@ public class ToDoController {
     }
 
     public void markAsComplete() {
-        // get listClicked data
-        // convert it into index where it's stored in the string array
-        // append -#&^C to the very end of the string
-        // -so it's never displayed
-        // display a greenBubble on the list item
+        // get item from taskClicked
+        // look for that item in the linked list
+        // change that index's boolean complete to true
 
 
     }
@@ -102,9 +94,8 @@ public class ToDoController {
     }
 
     public void deleteTask() {
-        // open temp.txt
-        // search temp.txt for data that matches selected list
-        // remove line
+        // search for selected task in linked list
+        // remove item
 
 
     }
@@ -116,13 +107,10 @@ public class ToDoController {
     }
 
     public void addNewTask() {
-        // open temp.txt
-        // create new StringBuilder
-        // append data from titleTaskTextBox
-        // append data from dateTextBox
-        // append data from descriptionTaskTextBox
-        // place data into temp.txt + \n
-
+        // get data from textbox
+        // add all data into an ToDoItemobj
+        // add obj to linked list
+        // update display
 
     }
 
@@ -132,9 +120,10 @@ public class ToDoController {
 
     }
 
-    //*********************************
     public void editDescriptionInit(){
-        //
+        // look for listClicked in the linked list
+        // take that index and change the .description of the obj w/ what's in the text field
+        // update display
 
 
     }
@@ -197,12 +186,3 @@ public class ToDoController {
     }
 
 }
-
-// TODO figure out how list view works and handles data
-
-/*
- *
- * perhaps string builder w/ size 200
- * even index and zero contain marked complete data (y,n)
- *
- * */

@@ -25,7 +25,7 @@ public class ToDo extends Application {
             Scene scene = new Scene(root);
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Todo List");
+            primaryStage.setTitle("To-Do List Menu");
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
