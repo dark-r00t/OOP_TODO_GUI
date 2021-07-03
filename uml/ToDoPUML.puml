@@ -1,5 +1,93 @@
 @startuml
 
+class ToDo {
+    + main()
+    + start()
+}
+class ToDoControllerMenu {
+    + addNewToDoButton()
+    + deleteToDoButton()
+    + editNameToDoButton()
+    + listClicked()
+    + selectToDoButton()
+    ..Items..
+    * SplitPane : mainPane
+    * TextField : titleToDoTextBox
+    * SplitPane: splitPane
+    * ListView : todoList
+}
 
+class ToDoList {
+    + ToDoList()
+    + addItem()
+    + removeItem()
+    + editName()
+    ..Variables..
+    * String : name
+    * LinkedList<ToDoTasks> : list
+    * int : amount
+}
+
+class ToDoControllerTask {
+    + specificUserDirec()
+    + listClicked()
+    + displayAllTaskButton()
+    + displayAll()
+    + displayCompleteTaskButton()
+    + displayCompleted()
+    + displayIncompleteTasksButton()
+    + displayIncomplete()
+    + markAsCompleteButton()
+    + markAsComplete()
+    + deleteTaskButton()
+    + deleteTask()
+    + addNewTaskButton()
+    + addNewTask()
+    + editDescription()
+    + changeDate()
+    + changeDateInit()
+    + modifyDateText()
+    + saveAllToDoButton()
+    + goBack()
+    + save()
+    + getUserData()
+    ..Items..
+    * SplitPane : mainPane
+    * SplitPane : splitPane
+    * TextField : descriptionTaskTextBox
+    * DatePicker : dateTextBox
+    * TextField : titleTaskTextBox
+    * TextField : updateTaskTextBox
+    * ListView : taskList
+    ..Variables..
+    * String : taskClicked
+    * LinkedList<ToDoItem> : items
+    * String : userDirec
+}
+
+class ToDoItem {
+    * ToDoItem
+    - name
+    - date
+    - description
+    - complete
+    ..Variables..
+    * String : name
+    * String : date
+    * String : description
+    * boolean : complete
+}
+
+
+
+ openjfx.Application <|- ToDo
+
+ToDo - ToDoControllerMenu
+
+ToDoControllerMenu - ToDoControllerTask
+ToDoControllerMenu -- ToDoList
+
+ToDoControllerTask - ToDoControllerMenu
+ToDoControllerTask -- ToDoItem
 
 @enduml
