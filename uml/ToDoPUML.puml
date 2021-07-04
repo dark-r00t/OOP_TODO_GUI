@@ -4,17 +4,21 @@ class ToDo {
     + main()
     + start()
 }
+
 class ToDoControllerMenu {
     + addNewToDoButton()
     + deleteToDoButton()
     + editNameToDoButton()
     + listClicked()
     + selectToDoButton()
+    + saveList()
+    + loadList()
     ..Items..
     * SplitPane : mainPane
     * TextField : titleToDoTextBox
     * SplitPane: splitPane
     * ListView : todoList
+    * ListView : selected
 }
 
 class ToDoList {
@@ -78,9 +82,7 @@ class ToDoItem {
     * boolean : complete
 }
 
-
-
- openjfx.Application <|- ToDo
+openjfx.Application <|- ToDo
 
 ToDo - ToDoControllerMenu
 

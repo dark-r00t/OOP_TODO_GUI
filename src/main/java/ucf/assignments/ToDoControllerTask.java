@@ -173,18 +173,14 @@ public class ToDoControllerTask {
     }
 
     public void save() {
-        // create new txt
-        // open txt
-        // call getUserData()
-        // save all user specified data into a txt
-        //close saved txt
+        // call saveList from ToDoControllerMenu
 
 
     }
 
     public StringBuilder getUserData() {
-        // get current todo list
-        // get every single task in the todo list
+        // get current todoList
+        // get every single task in the todoList
         // create one large stringBuilder and return
 
         return new StringBuilder();// temp so there's no crash
