@@ -90,4 +90,56 @@ class ToDoTest {
 
     }
 
+    void displayAll_ToDoController_test(){
+        // create a LinkedList<obj> w/ full objects
+        // create an expected result string
+        // call displayAll()
+        // test to see if the strings are the same
+
+
+    }
+
+    void displayCompleted(){
+        // create a LinkedList<obj> w/ f ull objects
+        //  -important some completed some not
+        // call displayCompleted and assign result to a string
+        // create an expected output string
+        // check to see if they are the same
+
+
+    }
+
+    void displayIncomplete(){
+        // create a LinkedList<obj> w/ f ull objects
+        //  -important some completed some not
+        // call displayIncomplete and assign result to a string
+        // create an expected output string
+        // check to see if they are the same
+
+
+    }
+
+    void saveList_test(){
+        // works for every todoList (single and multiple)
+
+        // create an expected result text file, following ideal formatting
+        // create a LinkedList<obj> w/ exact replicant data placed into the rext file above
+        // call saveList() w/ created LinkedList
+        // check to see if the files are equivalent
+
+
+    }
+
+    void loadList_ToDoControllerMenu(){
+        // works for every todoList (single and multiple)
+
+        // create an expected result LinkedList file, following ideal formatting
+        // create a text file w/ exact replicant data placed into the LinkedList above
+        // call loadList() on the text file
+        // call displayAll() on both LinkedList and store into separate strings
+        // check to see if the result strings are equivalent
+
+
+    }
+
 }

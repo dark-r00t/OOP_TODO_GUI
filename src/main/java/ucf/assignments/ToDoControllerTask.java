@@ -45,12 +45,13 @@ public class ToDoControllerTask {
 
     }
 
-    public void displayAll() {
+    public String displayAll() {
         // take data from linked list
         // modify for linked list display compatibility and general reformatting
+        // take all data and place into an output string (for testing)
         // reload display
 
-
+        return "";
     }
 
     public void displayCompletedTasksButton(ActionEvent actionEvent) {
@@ -59,12 +60,15 @@ public class ToDoControllerTask {
 
     }
 
-    public void displayCompleted() {
+    public String displayCompleted() {
         // make a new linked list
         // run loop adding every item marked as complete into new linked list
+        // modify for linked list display compatibility and general reformatting
+        // take all data and place into an output string (for testing)
         // display the new linked list
+        // save all new data into a string and return (for testing)
 
-
+        return "";
     }
 
     public void displayIncompleteTasksButton(ActionEvent actionEvent) {
@@ -73,12 +77,15 @@ public class ToDoControllerTask {
 
     }
 
-    public void displayIncomplete() {
+    public String displayIncomplete() {
         // make a new linked list
         // run loop adding every item marked as incomplete into new linked list
-        // display linked list
+        // modify for linked list display compatibility and general reformatting
+        // take all data and place into an output string (for testing)
+        // display the new linked list
+        // save all new data into a string and return (for testing)
 
-
+        return "";
     }
 
     public void markAsCompleteButton(ActionEvent actionEvent) {
