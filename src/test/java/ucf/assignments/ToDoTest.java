@@ -43,43 +43,49 @@ class ToDoTest {
     }
 
     void markAsComplete_ToDoController_Test(){
-
+        // create a LinkedList to test correct response
+        // give the linked list random information
+        // -important -> mark as complete
+        // create a second LinkedList w/ the desired response
+        // call markAsComplete
+        // test (assert) that they are equivalent
 
 
     }
 
     void deleteTask_ToDoController_Test(){
-
+        // create an empty object LinkedList
+        // create an expected LinkedList w/ random data inside
+        // call deleteTask
+        // test to see if the data was successfully deleted
+            // MAKE SURE ALL DATA IS DELETED
 
 
     }
 
     void addNewTask_ToDoController_Test(){
-
+        // create two empty LinkedList<obj>
+        //  -fill an obj with random data
+        // call addNewTask w/ same provided data
+        // test to see if theyre equivalent
 
 
     }
 
     void editDescriptionInit_ToDoController_Test(){
-
-
-
-    }
-
-    void changeDateInit_ToDoController_Test(){
-
+        // create a LinkedList<obj> w/ random data
+        // create a 2nd LinkedList<obj w/ the same data (different desc.)
+        //  call editDescriptionInit w/ desired new description and old
+        // test ot see if theyre equivalent
 
 
     }
 
     void modifyDateText_ToDoController_Test(){
-
-
-
-    }
-
-    void save_ToDoController_Test(){
-
+        // create a LinkedList<obj> w/ random data
+        // create a 2nd LinkedList<obj w/ the same data (different date.)
+        //  call changeDateInit w/ desired new date and old
+        // test ot see if theyre equivalent
 
 
     }

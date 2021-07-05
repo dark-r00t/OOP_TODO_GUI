@@ -22,20 +22,21 @@ public class ToDoControllerTask {
     public ListView taskList;
 
     // on open delete data in temp.txt
-    // create string for taskClicked
     // create linked list of ToDoItem objects
     // define a global variable for the user directory
 
     public void specificUserDirec(String userDirec) {
-        // modify userDirec so that it's in a specific file path [i.e. To-Do saves]
+        // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
 
 
     }
 
     public void listClicked(MouseEvent mouseEvent) {
-        // change string taskClicked to list's data
+        // allow for multiple items
+        // save 'selected' accordingly
 
-
+        // code idea?
+        // todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void displayAllTasksButton(ActionEvent actionEvent) {
@@ -45,7 +46,9 @@ public class ToDoControllerTask {
     }
 
     public void displayAll() {
-        // display data from linked list
+        // take data from linked list
+        // modify for linked list display compatibility and general reformatting
+        // reload display
 
 
     }
@@ -59,7 +62,7 @@ public class ToDoControllerTask {
     public void displayCompleted() {
         // make a new linked list
         // run loop adding every item marked as complete into new linked list
-        // display linked list
+        // display the new linked list
 
 
     }
@@ -173,7 +176,7 @@ public class ToDoControllerTask {
     }
 
     public void save() {
-        // call saveList from ToDoControllerMenu
+        // call saveList from ToDoControllerMenu w/ the currently selected list
 
 
     }

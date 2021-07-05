@@ -42,7 +42,9 @@ public class ToDoControllerMenu {
 
     public void listClicked(MouseEvent mouseEvent) {
         // allow for multiple items
+        // save selected accordingly
 
+        // code idea?
         // todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
@@ -58,6 +60,7 @@ public class ToDoControllerMenu {
         // create an observable list with all selected items
         // run a loop and store each list carefully into a txt file
 
+        // code idea?
         // String debug = "";
         // ObservableList<ToDoList> selectedToDos;
         // selectedToDos = todoList.getSelectionModel().getSelectedItems();
@@ -68,7 +71,12 @@ public class ToDoControllerMenu {
     }
 
     public void loadList(ActionEvent actionEvent) {
-        // take a text file
+        // take a text file w/ a setup of allowing multiple inputs
+        //  FileChooser
+        //  set initial direc
+        //  get all extension filters
+        //  make a List<File> of selected files (show open multiple dialgoue)
+        //  get items and add
         // load each element into the list view and store into the object list
 
 
