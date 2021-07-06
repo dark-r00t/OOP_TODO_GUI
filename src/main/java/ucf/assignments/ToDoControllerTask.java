@@ -6,6 +6,7 @@
 package ucf.assignments;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
@@ -25,12 +26,7 @@ public class ToDoControllerTask {
     // create linked list of ToDoItem objects
     // define a global variable for the user directory
 
-    public void specificUserDirec(String userDirec) {
-        // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
-
-
-    }
-
+    @FXML
     public void listClicked(MouseEvent mouseEvent) {
         // allow for multiple items
         // save 'selected' accordingly
@@ -45,134 +41,63 @@ public class ToDoControllerTask {
 
     }
 
-    public String displayAll() {
-        // take data from linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // reload display
-
-        return "";
-    }
-
+    @FXML
     public void displayCompletedTasksButton(ActionEvent actionEvent) {
         // call displayCompleted()
 
 
     }
 
-    public String displayCompleted() {
-        // make a new linked list
-        // run loop adding every item marked as complete into new linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // display the new linked list
-        // save all new data into a string and return (for testing)
-
-        return "";
-    }
-
+    @FXML
     public void displayIncompleteTasksButton(ActionEvent actionEvent) {
         // call displayIncomplete()
 
 
     }
 
-    public String displayIncomplete() {
-        // make a new linked list
-        // run loop adding every item marked as incomplete into new linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // display the new linked list
-        // save all new data into a string and return (for testing)
-
-        return "";
-    }
-
+    @FXML
     public void markAsCompleteButton(ActionEvent actionEvent) {
         // call markAsComplete()
 
 
     }
 
-    public void markAsComplete() {
-        // get item from taskClicked
-        // look for that item in the linked list
-        // change that index's boolean complete to true
-
-
-    }
-
+    @FXML
     public void deleteTaskButton(ActionEvent actionEvent) {
         // call deleteTask()
 
 
     }
 
-    public void deleteTask() {
-        // search for selected task in linked list
-        // remove item
-
-
-    }
-
+    @FXML
     public void addNewTaskButton(ActionEvent actionEvent) {
         // call addNewTask()
 
 
     }
 
-    public void addNewTask() {
-        // get data from textbox
-        // add all data into an ToDoItemobj
-        // add obj to linked list
-        // update display
-
-    }
-
+    @FXML
     public void editDescription(ActionEvent actionEvent) {
         // call editDescriptionInit()
 
 
     }
 
-    public void editDescriptionInit(){
-        // look for listClicked in the linked list
-        // take that index and change the .description of the obj w/ what's in the text field
-        // update display
-
-
-    }
-
+    @FXML
     public void changeDate(ActionEvent actionEvent) {
         // call changeDateInit()
 
 
     }
 
-    public void changeDateInit() {
-        // get text from dateTextBox
-        // get userSelectedTask
-        // check to see if format is correct
-        // call modifyDateText()
-
-
-    }
-
-    public void modifyDateText(int location, String newDate) {
-        // run loop to get selected list location in file
-        // find the date
-        // remove old date
-        // append newDate
-
-
-    }
-
+    @FXML
     public void saveAllToDoButton(ActionEvent actionEvent) {
         // call save()
 
 
     }
 
+    @FXML
     public void goBack(ActionEvent actionEvent) {
         // prompt to see if user wants to save
         // - call save()
@@ -180,20 +105,6 @@ public class ToDoControllerTask {
         // load ToDoMenu scene when clicked
 
 
-    }
-
-    public void save() {
-        // call saveList from ToDoControllerMenu w/ the currently selected list
-
-
-    }
-
-    public StringBuilder getUserData() {
-        // get current todoList
-        // get every single task in the todoList
-        // create one large stringBuilder and return
-
-        return new StringBuilder();// temp so there's no crash
     }
 
 }

@@ -7,6 +7,7 @@ package ucf.assignments;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
@@ -20,11 +21,13 @@ public class ToDoControllerMenu {
     public ListView todoList;
     ListView<ToDoList> selected;
 
+    @FXML
     public void addNewToDoButton(ActionEvent actionEvent) {
         // call ToDoList.addItem() w/ data from txtbox
 
     }
 
+    @FXML
     public void deleteToDoButton(ActionEvent actionEvent) {
         // check to see if the selected list is not empty
         // call ToDoList.removeItem() w/ the string for the selected list
@@ -32,6 +35,7 @@ public class ToDoControllerMenu {
 
     }
 
+    @FXML
     public void editNameToDoButton(ActionEvent actionEvent) {
         // check to see if the selected list is not empty
         // get data from text box
@@ -40,6 +44,7 @@ public class ToDoControllerMenu {
 
     }
 
+    @FXML
     public void listClicked(MouseEvent mouseEvent) {
         // allow for multiple items
         // save selected accordingly
@@ -48,6 +53,7 @@ public class ToDoControllerMenu {
         // todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    @FXML
     public void selectToDoButton(ActionEvent actionEvent) {
         // check to see if the selected list is not empty
         // open new scene for ToDofxml w/ data from string selected list
@@ -56,6 +62,7 @@ public class ToDoControllerMenu {
 
     }
 
+    @FXML
     public void saveList(ActionEvent actionEvent) {
         // create an observable list with all selected items
         // run a loop and store each list carefully into a txt file
@@ -70,6 +77,7 @@ public class ToDoControllerMenu {
         // }
     }
 
+    @FXML
     public void loadList(ActionEvent actionEvent) {
         // take a text file w/ a setup of allowing multiple inputs
         //  FileChooser

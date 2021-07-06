@@ -33,28 +33,16 @@ class ToDoList {
 }
 
 class ToDoControllerTask {
-    + specificUserDirec()
     + listClicked()
     + displayAllTaskButton()
-    + displayAll()
     + displayCompleteTaskButton()
-    + displayCompleted()
     + displayIncompleteTasksButton()
-    + displayIncomplete()
     + markAsCompleteButton()
-    + markAsComplete()
     + deleteTaskButton()
-    + deleteTask()
     + addNewTaskButton()
-    + addNewTask()
-    + editDescription()
-    + changeDate()
-    + changeDateInit()
     + modifyDateText()
     + saveAllToDoButton()
     + goBack()
-    + save()
-    + getUserData()
     ..Items..
     * SplitPane : mainPane
     * SplitPane : splitPane
@@ -67,6 +55,21 @@ class ToDoControllerTask {
     * String : taskClicked
     * LinkedList<ToDoItem> : items
     * String : userDirec
+}
+
+class ToDoTaskUtility {
+    + specificUserDirec()
+    + getUserData()
+    + displayAll()
+    + displayCompleted()
+    + displayIncomplete()
+    + markAsComplete()
+    + deleteTask()
+    + addNewTask()
+    + editDescription()
+    + changeDate()
+    + changeDateInit()
+    + save()
 }
 
 class ToDoItem {
@@ -91,5 +94,6 @@ ToDoControllerMenu -- ToDoList
 
 ToDoControllerTask - ToDoControllerMenu
 ToDoControllerTask -- ToDoItem
+ToDoControllerTask - ToDoTaskUtility
 
 @enduml
