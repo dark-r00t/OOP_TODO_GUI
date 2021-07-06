@@ -10,7 +10,7 @@
 <SplitPane fx:id="mainPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="434.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.ToDoControllerMenu">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="915.0">
         <Button id="addTaskButton" focusTraversable="false" layoutX="14.0" layoutY="58.0" mnemonicParsing="false" onAction="#addNewToDoButton" prefHeight="25.0" prefWidth="138.0" text="Add New To-Do" />
-        <TextField fx:id="titleToDoTextBox" layoutX="14.0" layoutY="12.0" prefHeight="25.0" prefWidth="283.0" promptText="Title." />
+        <TextField fx:id="titleToDoTextBox" layoutX="14.0" layoutY="12.0" prefHeight="25.0" prefWidth="283.0" promptText="Type here..." />
         <Button layoutX="177.0" layoutY="58.0" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editNameToDoButton" prefWidth="120.0" text="Edit Description" />
       <Button layoutX="841.0" layoutY="12.0" mnemonicParsing="false" onAction="#saveList" prefWidth="60.0" text="Save" />
       <Button layoutX="841.0" layoutY="58.0" maxWidth="60.0" mnemonicParsing="false" onAction="#loadList" prefWidth="60.0" text="Load" />
