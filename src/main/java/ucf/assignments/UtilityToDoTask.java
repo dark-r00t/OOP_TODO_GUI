@@ -5,13 +5,7 @@
 
 package ucf.assignments;
 
-public class ToDoTaskUtility {
-
-    public void specificUserDirec(String userDirec) {
-        // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
-
-
-    }
+public class UtilityToDoTask {
 
     public StringBuilder getUserData() {
         // get current todoList

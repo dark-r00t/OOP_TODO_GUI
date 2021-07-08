@@ -5,7 +5,7 @@
 
 package ucf.assignments;
 
-public class ToDoItem {
+public class TaskToDoObj {
     // make private variables
     // - name
     // - date
@@ -49,7 +49,7 @@ public class ToDoItem {
         this.complete = complete;
     }
 
-    public ToDoItem(String name, String date, String description) {
+    public TaskToDoObj(String name, String date, String description) {
         this.name = name;
         this.date = date;
         this.description = description;

@@ -13,7 +13,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-public class ToDoControllerTask {
+public class TaskToDoController {
     public SplitPane mainPane;
     public SplitPane splitPane;
     public TextField descriptionTaskTextBox;
