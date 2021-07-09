@@ -12,8 +12,6 @@ public class UtilityGeneral {
         if(ToDoFolder.mkdir()){
             System.out.println("created folder");
         }
-        else
-            System.out.println("folder already exists");
     }
 
     public static int indexer(){
@@ -33,7 +31,7 @@ public class UtilityGeneral {
     public static String userDirec() {
         // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
 
-        return System.getProperty("user.dir") + "\\ToDo_Files";
+        return System.getProperty("user.dir") + "\\.temp";
     }
 
 }
