@@ -15,18 +15,18 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import jdk.jshell.execution.Util;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 
 public class ListToDoController {
     public SplitPane mainPane;
     public TextField titleToDoTextBox;
     public SplitPane splitPane;
     public ListView<ListToDoObj> todoList;
-    public ListToDoObj pass;
+    public static ListToDoObj pass;
     public ObservableList<ListToDoObj> selected;
     public ObservableList<ListToDoObj> view;
 
@@ -97,7 +97,7 @@ public class ListToDoController {
     }
 
     @FXML
-    public void loadList(ActionEvent actionEvent) {
+    public void loadList(ActionEvent actionEvent) throws IOException {
         // take a text file w/ a setup of allowing multiple inputs
         //  FileChooser
         //  set initial direc
@@ -106,7 +106,7 @@ public class ListToDoController {
         //  get items and add
         // load each element into the list view and store into the object list
 
-
+        loadListFile();
     }
 
     public void addItem(String name) throws IOException {
@@ -194,10 +194,8 @@ public class ListToDoController {
 
             FileWriter todoWrite = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
 
-            todoWrite.write("&NTDL\n");
+            //todoWrite.write("&NTDL\n");
             todoWrite.write(item.toString() + "\n" + index + "\n");
-
-            todoWrite.write("this is a test\nree");
 
             todoWrite.close();
 
@@ -225,13 +223,53 @@ public class ListToDoController {
 
             FileWriter writer = new FileWriter(editedDataFile);
 
-            writer.write("&NTDL\n");
+            //writer.write("&NTDL\n");
             writer.write(data.toString());
 
             reader.close();
             writer.close();
 
         }
+    }
+
+    public void loadListFile() throws IOException {
+
+        String path = System.getProperty("user.dir");
+
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(new File(path));
+
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File: ", "*.txt"));
+
+        List<File> selectedFile = fc.showOpenMultipleDialog(null);
+        for (File file : selectedFile) {
+            formatFile(file);
+        }
+
+    }
+
+    public void formatFile(File selectedFile) throws IOException {
+
+        Scanner file = new Scanner(selectedFile);
+
+        String name = file.nextLine();
+        file.nextLine();
+
+        addItem(name);
+        int index = allItems.size();
+        int amount = 0;
+
+        //TODO FIX INDEX
+        System.out.println("index: "+ index);
+
+        FileWriter fw = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+        fw.write(name + "\n" + index + "\n");
+        while(file.hasNextLine()){
+            String temp = file.nextLine();
+            fw.write(temp + "\n");
+        }
+        fw.close();
+
     }
 
 }

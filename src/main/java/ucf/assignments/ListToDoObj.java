@@ -5,7 +5,10 @@
 
 package ucf.assignments;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ListToDoObj {
     // create a private string for name
@@ -17,7 +20,7 @@ public class ListToDoObj {
     // remove item function
 
     private String name;
-    private LinkedList<TaskToDoObj> list;
+    private static LinkedList<TaskToDoObj> list;
     private int amount;
     public int index;
 

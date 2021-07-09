@@ -7,10 +7,7 @@ package ucf.assignments;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 public class TaskToDoController {
@@ -31,8 +28,7 @@ public class TaskToDoController {
         // allow for multiple items
         // save 'selected' accordingly
 
-        // code idea?
-        // todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        //todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void displayAllTasksButton(ActionEvent actionEvent) {
@@ -105,14 +101,6 @@ public class TaskToDoController {
         // load ToDoMenu scene when clicked
 
 
-    }
-
-    public StringBuilder getUserData() {
-        // get current todoList
-        // get every single task in the todoList
-        // create one large stringBuilder and return
-
-        return new StringBuilder();// temp so there's no crash
     }
 
     public String displayAll() {
