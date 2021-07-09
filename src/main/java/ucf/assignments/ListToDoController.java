@@ -5,20 +5,16 @@
 
 package ucf.assignments;
 
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import jdk.jshell.execution.Util;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 public class ListToDoController {
@@ -28,85 +24,16 @@ public class ListToDoController {
     public ListView<ListToDoObj> todoList;
     public static ListToDoObj pass;
     public ObservableList<ListToDoObj> selected;
-    public ObservableList<ListToDoObj> view;
 
-    ArrayList<ListToDoObj> allItems = new ArrayList();
+    LinkedList<ListToDoObj> allItems = new LinkedList<>();
 
     @FXML
-    public void addNewToDoButton(ActionEvent actionEvent) throws IOException {
+    public void addNewToDoButton() throws IOException {
         // call ToDoList.addItem() w/ data from txtbox
 
         String name = titleToDoTextBox.getText();
 
         addItem(name);
-    }
-
-    @FXML
-    public void deleteToDoButton(ActionEvent actionEvent) throws IOException {
-        // check to see if the selected list is not empty
-        // call ToDoList.removeItem() w/ the string for the selected list
-
-        selected = todoList.getSelectionModel().getSelectedItems();
-
-        deleteItem(selected);
-    }
-
-    @FXML
-    public void editNameToDoButton(ActionEvent actionEvent) throws IOException {
-        // check to see if the selected list is not empty
-        // get data from text box
-        // call ToDoList.editName() w/ data from selected string and textbox
-
-        String name = titleToDoTextBox.getText();
-
-        editName(name);
-    }
-
-    @FXML
-    public void listClicked(MouseEvent mouseEvent) {
-        // allow for multiple items
-        // save selected accordingly
-
-        // code idea?
-        todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        System.out.println(todoList);
-    }
-
-    @FXML
-    public void selectToDoButton(ActionEvent actionEvent) {
-        // check to see if the selected list is not empty
-        // open new scene for ToDofxml w/ data from string selected list
-        // close old scene
-
-
-    }
-
-    @FXML
-    public void saveList(ActionEvent actionEvent) {
-        // create an observable list with all selected items
-        // run a loop and store each list carefully into a txt file
-
-        // code idea?
-        // String debug = "";
-        // ObservableList<ToDoList> selectedToDos;
-        // selectedToDos = todoList.getSelectionModel().getSelectedItems();
-
-        // for(ToDoList x : selectedToDos){
-        //     System.out.println(selectedToDos);
-        // }
-    }
-
-    @FXML
-    public void loadList(ActionEvent actionEvent) throws IOException {
-        // take a text file w/ a setup of allowing multiple inputs
-        //  FileChooser
-        //  set initial direc
-        //  get all extension filters
-        //  make a List<File> of selected files (show open multiple dialgoue)
-        //  get items and add
-        // load each element into the list view and store into the object list
-
-        loadListFile();
     }
 
     public void addItem(String name) throws IOException {
@@ -122,33 +49,33 @@ public class ListToDoController {
         System.out.println("Added: " + item);
     }
 
+    @FXML
+    public void deleteToDoButton() throws IOException {
+        // check to see if the selected list is not empty
+        // call ToDoList.removeItem() w/ the string for the selected list
+
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        deleteItem(selected);
+    }
+
     public void deleteItem(ObservableList<ListToDoObj> selected) throws IOException {
         // run loop to find item w/ the same name
         // remove the item
         // decrease total amount
 
-        int amount = 0;
         for (ListToDoObj i : selected) {
-
             pass = i;
-
-            removeFile(pass.getIndex());
-            updateIndex(pass.getIndex());
-
-            allItems.remove(pass.getIndex() - 1);
-            System.out.println("New list: " + allItems);
-
-            todoList.getItems().remove(pass.getIndex() - 1);
-
-            amount++;
         }
 
-        //TODO doesnt delete multiple files??
-        for (int i = 0; i < amount; i++) {
-            removeFile(allItems.size() + i + 1);
-            System.out.println(allItems.size() + i + 1);
-        }
+        removeFile(pass.getIndex());
+        updateIndex(pass.getIndex());
 
+        allItems.remove(pass.getIndex() - 1);
+
+        todoList.getItems().remove(pass.getIndex() - 1);
+
+        removeFile(allItems.size() + 1);
     }
 
     public void removeFile(int txt) {
@@ -163,13 +90,16 @@ public class ListToDoController {
         }
     }
 
-    public void updateIndex(int index) throws IOException {
+    //TODO FIX
+    @FXML
+    public void editNameToDoButton() throws IOException {
+        // check to see if the selected list is not empty
+        // get data from text box
+        // call ToDoList.editName() w/ data from selected string and textbox
 
-        for (int i = index; i < allItems.size(); i++) {
+        String name = titleToDoTextBox.getText();
 
-            allItems.get(i).setIndex(-1);
-            storeData(allItems.get(i));
-        }
+        editName(name);
     }
 
     public void editName(String name) throws IOException {
@@ -186,50 +116,64 @@ public class ListToDoController {
         }
     }
 
-    public void storeData(ListToDoObj item) throws IOException {
-        UtilityGeneral.createFolder();
+    @FXML
+    public void listClicked() {
+        // allow for multiple items
+        // save selected accordingly
 
-        if (item.getIndex() == -1) {
-            int index = UtilityGeneral.indexer();
+        // code idea?
+        todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        System.out.println(todoList);
+    }
 
-            FileWriter todoWrite = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+    //TODO ADD
+    @FXML
+    public void selectToDoButton() {
+        // check to see if the selected list is not empty
+        // open new scene for ToDofxml w/ data from string selected list
+        // close old scene
 
-            //todoWrite.write("&NTDL\n");
-            todoWrite.write(item.toString() + "\n" + index + "\n");
 
-            todoWrite.close();
+    }
 
-            item.setIndex(index);
+    public void selectToDo(){
 
-        } else {
 
-            int index = item.getIndex();
-            StringBuilder data = new StringBuilder();
+    }
 
-            File editedDataFile = new File(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
-            BufferedReader reader = new BufferedReader(new FileReader(editedDataFile));
+    //TODO ADD
+    @FXML
+    public void saveList() {
+        // create an observable list with all selected items
+        // run a loop and store each list carefully into a txt file
 
-            String oldName = reader.readLine();
-            oldName = reader.readLine();
+        saveSelectedList();
+    }
 
-            String newName = titleToDoTextBox.getText();
-            data.append(newName).append("\n").append(index);
+    public void saveSelectedList() {
+        // code idea?
+        // String debug = "";
+        // ObservableList<ToDoList> selectedToDos;
+        // selectedToDos = todoList.getSelectionModel().getSelectedItems();
 
-            String line = reader.readLine();
-            while (line != null) {
-                data.append(line);
-                line = reader.readLine();
-            }
+        // for(ToDoList x : selectedToDos){
+        //     System.out.println(selectedToDos);
+        // }
 
-            FileWriter writer = new FileWriter(editedDataFile);
+        todoList.getSelectionModel().getSelectedItems();
+    }
 
-            //writer.write("&NTDL\n");
-            writer.write(data.toString());
+    @FXML
+    public void loadList() throws IOException {
+        // take a text file w/ a setup of allowing multiple inputs
+        //  FileChooser
+        //  set initial direc
+        //  get all extension filters
+        //  make a List<File> of selected files (show open multiple dialgoue)
+        //  get items and add
+        // load each element into the list view and store into the object list
 
-            reader.close();
-            writer.close();
-
-        }
+        loadListFile();
     }
 
     public void loadListFile() throws IOException {
@@ -237,7 +181,7 @@ public class ListToDoController {
         String path = System.getProperty("user.dir");
 
         FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File(path));
+        fc.setInitialDirectory(new File(path + "\\ToDo_Files"));
 
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File: ", "*.txt"));
 
@@ -251,26 +195,89 @@ public class ListToDoController {
     public void formatFile(File selectedFile) throws IOException {
 
         Scanner file = new Scanner(selectedFile);
-
         String name = file.nextLine();
-        file.nextLine();
+        int index = allItems.size() + 1;
 
         addItem(name);
-        int index = allItems.size();
-        int amount = 0;
-
-        //TODO FIX INDEX
-        System.out.println("index: "+ index);
 
         FileWriter fw = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
-        fw.write(name + "\n" + index + "\n");
-        while(file.hasNextLine()){
+        fw.write(name + "\n");
+        while (file.hasNextLine()) {
             String temp = file.nextLine();
             fw.write(temp + "\n");
         }
         fw.close();
 
     }
+
+    public void storeData(ListToDoObj item) throws IOException {
+        UtilityGeneral.createTempFolder();
+
+        if (item.getIndex() == -1) {
+            int index = UtilityGeneral.indexer();
+
+            FileWriter todoWrite = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+
+            //todoWrite.write("&NTDL\n");
+            todoWrite.write(item + "\n");
+
+            todoWrite.close();
+
+            item.setIndex(index);
+
+        } else {
+
+            int index = item.getIndex();
+            StringBuilder data = new StringBuilder();
+
+            File editedDataFile = new File(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+            BufferedReader reader = new BufferedReader(new FileReader(editedDataFile));
+
+            reader.readLine();
+            reader.readLine();
+
+            String newName = titleToDoTextBox.getText();
+            data.append(newName).append("\n").append(index);
+
+            String line = reader.readLine();
+            while (line != null) {
+                data.append(line);
+                line = reader.readLine();
+            }
+
+            FileWriter writer = new FileWriter(editedDataFile);
+            writer.write(data.toString());
+
+            reader.close();
+            writer.close();
+
+        }
+    }
+
+    public void updateIndex(int index) throws IOException {
+        // loop
+        // set temp index = i + 1
+        // take temp index data put it into index file
+
+        for (int i = index; i < allItems.size(); i++) {
+
+            if(i + 1 == allItems.size()){
+                break;
+            }
+
+            File newFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i + 1) + ".txt");
+            File oldFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i) + ".txt");
+
+            try {
+                newFile.renameTo(oldFile);
+            } catch (Exception e) {
+                System.out.println("FAILED TO UPDATE INDEX");
+            }
+
+        }
+    }
+
+
 
 }
 

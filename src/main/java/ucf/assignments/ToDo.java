@@ -11,9 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class ToDo extends Application {
@@ -25,18 +23,10 @@ public class ToDo extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            String path = UtilityGeneral.userDirec();
 
-            for (int i = 0; i < 100; i++) {
-                int item = i + 1;
-                String newPath = path + "\\list_" + item + ".txt";
+            UtilityGeneral.addToDoSaveFolder();
 
-                File index = new File(newPath);
-
-                if(index.delete()){
-                    System.out.println("Deleted list_" + item + ".txt successfully.");
-                }
-            }
+            UtilityGeneral.removeTempFiles();
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ToDoMenu.fxml")));
 
