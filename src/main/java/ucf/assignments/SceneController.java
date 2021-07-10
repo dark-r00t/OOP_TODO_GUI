@@ -25,6 +25,7 @@ public class SceneController {
         scene = new Scene(root);
 
         stage.setScene(scene);
+        stage.setTitle("To-Do List Menu");
         stage.show();
     }
 
@@ -35,6 +36,7 @@ public class SceneController {
         scene = new Scene(root);
 
         stage.setScene(scene);
+        stage.setTitle("To-Do List Task");
         stage.show();
     }
 
@@ -45,6 +47,7 @@ public class SceneController {
         scene = new Scene(root);
 
         stage.setScene(scene);
+        stage.setTitle("To-Do List Menu Helper");
         stage.show();
     }
 
@@ -54,6 +57,7 @@ public class SceneController {
         Stage stage = new Stage();
         scene = new Scene(root);
 
+        stage.setTitle("To-Do List Task Helper");
         stage.setScene(scene);
         stage.show();
     }
