@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
 
 public class ListToDoController {
@@ -66,16 +65,17 @@ public class ListToDoController {
 
         for (ListToDoObj i : selected) {
             pass = i;
+
+            removeFile(pass.getIndex());
+
+            if(pass.getIndex() != allItems.size()){
+                updateIndex(pass.getIndex());
+            }
+
+            allItems.remove(pass.getIndex() - 1);
+            todoList.getItems().remove(pass.getIndex() - 1);
         }
 
-        removeFile(pass.getIndex());
-        updateIndex(pass.getIndex());
-
-        allItems.remove(pass.getIndex() - 1);
-
-        todoList.getItems().remove(pass.getIndex() - 1);
-
-        removeFile(allItems.size() + 1);
     }
 
     public void removeFile(int txt) {
@@ -106,14 +106,32 @@ public class ListToDoController {
         // search for the selected list in the LinkedList
         // change the name w/ string from newName
 
-        ObservableList<ListToDoObj> selected;
         selected = todoList.getSelectionModel().getSelectedItems();
 
-        for (ListToDoObj i : selected) {
-            pass = i;
-            pass.setName(name);
-            storeData(pass);
+        for (ListToDoObj item : selected) {
+            pass = item;
+            int index = pass.getIndex();
+
+            for (int i = index; i < allItems.size(); i++) {
+
+                File newFile = new File(UtilityGeneral.userDirec() + "temp.txt");
+                File oldFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i) + ".txt");
+
+                try {
+                    if(newFile.renameTo(oldFile)){
+                        System.out.println("File copied.");
+                    }
+                } catch (Exception e) {
+                    System.out.println("FAILED TO UPDATE INDEX");
+                }
+
+            }
+
         }
+
+        deleteItem(selected);
+
+
     }
 
     @FXML
@@ -195,18 +213,24 @@ public class ListToDoController {
     public void formatFile(File selectedFile) throws IOException {
 
         Scanner file = new Scanner(selectedFile);
+
         String name = file.nextLine();
-        int index = allItems.size() + 1;
+        file.nextLine();
 
         addItem(name);
+        int index = allItems.size();
+
+        System.out.println("index: "+ index);
 
         FileWriter fw = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
-        fw.write(name + "\n");
-        while (file.hasNextLine()) {
+        fw.write(name + "\n" + index + "\n");
+        while(file.hasNextLine()){
             String temp = file.nextLine();
             fw.write(temp + "\n");
         }
         fw.close();
+
+        allItems.get(index - 1).setIndex(index);
 
     }
 
@@ -233,9 +257,6 @@ public class ListToDoController {
             File editedDataFile = new File(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
             BufferedReader reader = new BufferedReader(new FileReader(editedDataFile));
 
-            reader.readLine();
-            reader.readLine();
-
             String newName = titleToDoTextBox.getText();
             data.append(newName).append("\n").append(index);
 
@@ -251,25 +272,25 @@ public class ListToDoController {
             reader.close();
             writer.close();
 
+            item.setIndex(index);
+
         }
     }
 
-    public void updateIndex(int index) throws IOException {
+    public void updateIndex(int index) {
         // loop
         // set temp index = i + 1
         // take temp index data put it into index file
 
         for (int i = index; i < allItems.size(); i++) {
 
-            if(i + 1 == allItems.size()){
-                break;
-            }
-
             File newFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i + 1) + ".txt");
             File oldFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i) + ".txt");
 
             try {
-                newFile.renameTo(oldFile);
+                if(newFile.renameTo(oldFile)){
+                    System.out.println("File copied.");
+                }
             } catch (Exception e) {
                 System.out.println("FAILED TO UPDATE INDEX");
             }
