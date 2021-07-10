@@ -1,5 +1,6 @@
 package ucf.assignments;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -12,24 +13,25 @@ import java.util.Objects;
 
 public class SceneController {
 
-    private static Stage stage;
     private static Scene scene;
     private static Parent root;
 
-    public static void switchToMenu(ActionEvent event) throws IOException {
+    public static void switchToMenu() throws IOException {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoMenu.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
         scene = new Scene(root);
+
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void switchToTask(ActionEvent event) throws IOException {
+    public static void switchToTask() throws IOException {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDo.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoTask.fxml")));
+        Stage stage = new Stage();
         scene = new Scene(root);
+
         stage.setScene(scene);
         stage.show();
     }

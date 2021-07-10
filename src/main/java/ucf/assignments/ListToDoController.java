@@ -130,7 +130,7 @@ public class ListToDoController {
     }
 
     @FXML
-    public void selectToDoButton() {
+    public void selectToDoButton() throws IOException {
         // check to see if the selected list is not empty
         // open new scene for ToDofxml w/ data from string selected list
         // close old scene
@@ -138,6 +138,7 @@ public class ListToDoController {
         selected = todoList.getSelectionModel().getSelectedItems();
 
         selectToDo();
+        SceneController.switchToTask();
     }
 
     public void selectToDo(){
@@ -162,8 +163,6 @@ public class ListToDoController {
 
             break;
         }
-
-        openNewScene();
 
     }
 
