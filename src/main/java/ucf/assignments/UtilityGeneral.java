@@ -1,35 +1,41 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  Copyright 2021 Jan Darge
+ */
+
+
 package ucf.assignments;
 
 import java.io.File;
 
 public class UtilityGeneral {
 
-    public static void addToDoSaveFolder(){
+    public static void addToDoSaveFolder() {
 
         String path = System.getProperty("user.dir") + "\\ToDo_Files";
 
         File ToDoFolder = new File(path);
-        if(ToDoFolder.mkdir()){
+        if (ToDoFolder.mkdir()) {
             System.out.println("Created ToDo_Files folder.");
         }
     }
 
-    public static void createTempFolder(){
+    public static void createTempFolder() {
         String path = tempDirec();
 
         File ToDoFolder = new File(path);
-        if(ToDoFolder.mkdir()){
+        if (ToDoFolder.mkdir()) {
             System.out.println("Created .temp folder.");
         }
     }
 
-    public static int indexer(){
+    public static int indexer() {
         int i;
         String path = tempDirec();
 
-        for(i = 1; i < 100 + 1; i++){
+        for (i = 1; i < 100 + 1; i++) {
             File test = new File(path + "\\list_" + i + ".txt");
-            if(!test.exists()){
+            if (!test.exists()) {
                 break;
             }
         }
@@ -43,7 +49,7 @@ public class UtilityGeneral {
         return System.getProperty("user.dir") + "\\.temp";
     }
 
-    public static void removeTempFiles(){
+    public static void removeTempFiles() {
 
         String path = UtilityGeneral.tempDirec();
 
@@ -54,18 +60,18 @@ public class UtilityGeneral {
 
             File index = new File(newPath);
 
-            if(index.delete()){
+            if (index.delete()) {
                 System.out.println("Deleted list_" + item + ".txt successfully.");
             }
 
         }
 
         File previousSelected = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
-        try{
-            if(previousSelected.delete()){
+        try {
+            if (previousSelected.delete()) {
                 System.out.println("Deleted selected.txt successfully.");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Failed to delete selected.txt");
         }
     }

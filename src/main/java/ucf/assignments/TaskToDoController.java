@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
+
 public class TaskToDoController {
     public SplitPane mainPane;
     public SplitPane splitPane;
@@ -28,11 +30,22 @@ public class TaskToDoController {
         // allow for multiple items
         // save 'selected' accordingly
 
-        //todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        taskList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        System.out.println(taskList);
     }
 
+    @FXML
     public void displayAllTasksButton(ActionEvent actionEvent) {
         // call displayAll()
+
+        displayAll();
+    }
+
+    public void displayAll() {
+        // take data from linked list
+        // modify for linked list display compatibility and general reformatting
+        // take all data and place into an output string (for testing)
+        // reload display
 
 
     }
@@ -42,74 +55,6 @@ public class TaskToDoController {
         // call displayCompleted()
 
 
-    }
-
-    @FXML
-    public void displayIncompleteTasksButton(ActionEvent actionEvent) {
-        // call displayIncomplete()
-
-
-    }
-
-    @FXML
-    public void markAsCompleteButton(ActionEvent actionEvent) {
-        // call markAsComplete()
-
-
-    }
-
-    @FXML
-    public void deleteTaskButton(ActionEvent actionEvent) {
-        // call deleteTask()
-
-
-    }
-
-    @FXML
-    public void addNewTaskButton(ActionEvent actionEvent) {
-        // call addNewTask()
-
-
-    }
-
-    @FXML
-    public void editDescription(ActionEvent actionEvent) {
-        // call editDescriptionInit()
-
-
-    }
-
-    @FXML
-    public void changeDate(ActionEvent actionEvent) {
-        // call changeDateInit()
-
-
-    }
-
-    @FXML
-    public void saveAllToDoButton(ActionEvent actionEvent) {
-        // call save()
-
-
-    }
-
-    @FXML
-    public void goBack(ActionEvent actionEvent) {
-        // prompt to see if user wants to save
-        // - call save()
-        // close any open files
-        // load ToDoMenu scene when clicked
-
-
-    }
-
-    public String displayAll() {
-        // take data from linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // reload display
-
-        return "";
     }
 
     public String displayCompleted() {
@@ -123,6 +68,13 @@ public class TaskToDoController {
         return "";
     }
 
+    @FXML
+    public void displayIncompleteTasksButton(ActionEvent actionEvent) {
+        // call displayIncomplete()
+
+
+    }
+
     public String displayIncomplete() {
         // make a new linked list
         // run loop adding every item marked as incomplete into new linked list
@@ -134,6 +86,13 @@ public class TaskToDoController {
         return "";
     }
 
+    @FXML
+    public void markAsCompleteButton(ActionEvent actionEvent) {
+        // call markAsComplete()
+
+
+    }
+
     public void markAsComplete() {
         // get item from taskClicked
         // look for that item in the linked list
@@ -142,9 +101,23 @@ public class TaskToDoController {
 
     }
 
+    @FXML
+    public void deleteTaskButton(ActionEvent actionEvent) {
+        // call deleteTask()
+
+
+    }
+
     public void deleteTask() {
         // search for selected task in linked list
         // remove item
+
+
+    }
+
+    @FXML
+    public void addNewTaskButton(ActionEvent actionEvent) {
+        // call addNewTask()
 
 
     }
@@ -157,10 +130,24 @@ public class TaskToDoController {
 
     }
 
+    @FXML
+    public void editDescription(ActionEvent actionEvent) {
+        // call editDescriptionInit()
+
+
+    }
+
     public void editDescriptionInit() {
         // look for listClicked in the linked list
         // take that index and change the .description of the obj w/ what's in the text field
         // update display
+
+
+    }
+
+    @FXML
+    public void changeDate(ActionEvent actionEvent) {
+        // call changeDateInit()
 
 
     }
@@ -183,10 +170,33 @@ public class TaskToDoController {
 
     }
 
+    @FXML
+    public void saveAllToDoButton(ActionEvent actionEvent) {
+        // call save()
+
+
+    }
+
     public void save() {
         // call saveList from ToDoControllerMenu w/ the currently selected list
 
 
+    }
+
+    @FXML
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        // prompt to see if user wants to save
+        // - call save()
+        // close any open files
+        // load ToDoMenu scene when clicked
+
+        SceneController.switchToMenu();
+    }
+
+    @FXML
+    public void helpTask() throws IOException {
+
+        SceneController.taskHelp();
     }
 
 }

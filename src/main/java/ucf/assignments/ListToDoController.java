@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class ListToDoController {
+
     public SplitPane mainPane;
     public TextField titleToDoTextBox;
     public SplitPane splitPane;
@@ -51,7 +52,7 @@ public class ListToDoController {
     }
 
     @FXML
-    public void deleteToDoButton() throws IOException {
+    public void deleteToDoButton() {
         // check to see if the selected list is not empty
         // call ToDoList.removeItem() w/ the string for the selected list
 
@@ -60,7 +61,7 @@ public class ListToDoController {
         deleteItem(selected);
     }
 
-    public void deleteItem(ObservableList<ListToDoObj> selected) throws IOException {
+    public void deleteItem(ObservableList<ListToDoObj> selected) {
         // run loop to find item w/ the same name
         // remove the item
         // decrease total amount
@@ -70,7 +71,7 @@ public class ListToDoController {
 
             removeFile(pass.getIndex());
 
-            if(pass.getIndex() != allItems.size()){
+            if (pass.getIndex() != allItems.size()) {
                 updateIndex(pass.getIndex());
                 pass.setIndex(pass.getIndex() - 1);
             }
@@ -139,9 +140,10 @@ public class ListToDoController {
 
         selectToDo();
         SceneController.switchToTask();
+
     }
 
-    public void selectToDo(){
+    public void selectToDo() {
 
         for (ListToDoObj i : selected) {
             pass = i;
@@ -163,12 +165,6 @@ public class ListToDoController {
 
             break;
         }
-
-    }
-
-    public void openNewScene(){
-
-
 
     }
 
@@ -200,10 +196,12 @@ public class ListToDoController {
 
     public void saveSingleList(ListToDoObj item) {
 
-        for (int i = 1;; i++) {
+        for (int i = 1; ; i++) {
 
-            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i);
-            if(!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i).isFile()){
+            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+            if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
+
+                System.out.println(item.getIndex());
 
                 File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
                 File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
@@ -212,7 +210,7 @@ public class ListToDoController {
                     Files.copy(oldFile.toPath(), newFile.toPath());
                     System.out.println("File copied.");
                 } catch (Exception e) {
-                    System.out.println("FAILED TO UPDATE INDEX");
+                    System.out.println("Failed to copy files.");
                 }
 
                 break;
@@ -259,11 +257,11 @@ public class ListToDoController {
         addItem(name);
         int index = allItems.size();
 
-        System.out.println("index: "+ index);
+        System.out.println("index: " + index);
 
         FileWriter fw = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
         fw.write(name + "\n" + index + "\n");
-        while(file.hasNextLine()){
+        while (file.hasNextLine()) {
             String temp = file.nextLine();
             fw.write(temp + "\n");
         }
@@ -329,7 +327,7 @@ public class ListToDoController {
             File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + (i) + ".txt");
 
             try {
-                if(newFile.renameTo(oldFile)){
+                if (newFile.renameTo(oldFile)) {
                     System.out.println("File copied.");
                 }
             } catch (Exception e) {
@@ -337,6 +335,12 @@ public class ListToDoController {
             }
 
         }
+    }
+
+    @FXML
+    public void helpMenu() throws IOException {
+
+        SceneController.menuHelp();
     }
 
 }

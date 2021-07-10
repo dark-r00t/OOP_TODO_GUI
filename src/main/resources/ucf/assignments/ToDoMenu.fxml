@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<SplitPane fx:id="mainPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="434.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.ListToDoController">
+<SplitPane fx:id="mainPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="434.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.ListToDoController">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="915.0">
         <Button id="addTaskButton" focusTraversable="false" layoutX="14.0" layoutY="58.0" mnemonicParsing="false" onAction="#addNewToDoButton" prefHeight="25.0" prefWidth="138.0" text="Add New To-Do" />
         <TextField fx:id="titleToDoTextBox" layoutX="14.0" layoutY="12.0" prefHeight="25.0" prefWidth="283.0" promptText="Type here..." />
@@ -21,6 +17,7 @@
             <Label layoutX="388.0" layoutY="6.0" text="To-Do" />
             <Button focusTraversable="false" layoutX="795.0" layoutY="267.0" mnemonicParsing="false" onAction="#deleteToDoButton" prefHeight="35.0" prefWidth="100.0" text="Delete" />
             <Button layoutX="795.0" layoutY="220.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#selectToDoButton" prefHeight="35.0" prefWidth="100.0" text="Select" />
+         <Button fx:id="helpMenuButton" layoutX="825.0" layoutY="23.0" mnemonicParsing="false" onAction="#helpMenu" text="Help" />
         </AnchorPane>
     </SplitPane>
 </SplitPane>

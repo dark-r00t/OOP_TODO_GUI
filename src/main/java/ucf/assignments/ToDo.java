@@ -28,6 +28,7 @@ public class ToDo extends Application {
 
             UtilityGeneral.removeTempFiles();
 
+            // TODO CHANGE BACK TO MENU
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ToDoMenu.fxml")));
 
             Scene scene = new Scene(root);
@@ -35,6 +36,7 @@ public class ToDo extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("To-Do List Menu");
             primaryStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
