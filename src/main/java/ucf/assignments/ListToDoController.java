@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 public class ListToDoController {
@@ -22,6 +23,7 @@ public class ListToDoController {
     public SplitPane splitPane;
     public ListView<ListToDoObj> todoList;
     public static ListToDoObj pass;
+    public static ListToDoObj temp;
     public ObservableList<ListToDoObj> selected;
 
     LinkedList<ListToDoObj> allItems = new LinkedList<>();
@@ -70,6 +72,7 @@ public class ListToDoController {
 
             if(pass.getIndex() != allItems.size()){
                 updateIndex(pass.getIndex());
+                pass.setIndex(pass.getIndex() - 1);
             }
 
             allItems.remove(pass.getIndex() - 1);
@@ -79,7 +82,7 @@ public class ListToDoController {
     }
 
     public void removeFile(int txt) {
-        String path = UtilityGeneral.userDirec();
+        String path = UtilityGeneral.tempDirec();
 
         String newPath = path + "\\list_" + txt + ".txt";
 
@@ -90,48 +93,30 @@ public class ListToDoController {
         }
     }
 
-    //TODO FIX
     @FXML
     public void editNameToDoButton() throws IOException {
         // check to see if the selected list is not empty
         // get data from text box
         // call ToDoList.editName() w/ data from selected string and textbox
 
-        String name = titleToDoTextBox.getText();
-
-        editName(name);
-    }
-
-    public void editName(String name) throws IOException {
-        // search for the selected list in the LinkedList
-        // change the name w/ string from newName
-
         selected = todoList.getSelectionModel().getSelectedItems();
 
         for (ListToDoObj item : selected) {
-            pass = item;
-            int index = pass.getIndex();
 
-            for (int i = index; i < allItems.size(); i++) {
-
-                File newFile = new File(UtilityGeneral.userDirec() + "temp.txt");
-                File oldFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i) + ".txt");
-
-                try {
-                    if(newFile.renameTo(oldFile)){
-                        System.out.println("File copied.");
-                    }
-                } catch (Exception e) {
-                    System.out.println("FAILED TO UPDATE INDEX");
-                }
-
-            }
-
+            editName(item);
         }
+    }
 
-        deleteItem(selected);
+    public void editName(ListToDoObj item) throws IOException {
+        // search for the selected list in the LinkedList
+        // change the name w/ string from newName
 
+        temp = item;
 
+        storeData(temp);
+        temp.setName(titleToDoTextBox.getText());
+        todoList.getItems().add(temp);
+        todoList.getItems().remove(item);
     }
 
     @FXML
@@ -144,22 +129,50 @@ public class ListToDoController {
         System.out.println(todoList);
     }
 
-    //TODO ADD
     @FXML
     public void selectToDoButton() {
         // check to see if the selected list is not empty
         // open new scene for ToDofxml w/ data from string selected list
         // close old scene
 
+        selected = todoList.getSelectionModel().getSelectedItems();
 
+        selectToDo();
     }
 
     public void selectToDo(){
 
+        for (ListToDoObj i : selected) {
+            pass = i;
+
+            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + pass.getIndex());
+            File newFile = new File(UtilityGeneral.tempDirec() + "\\selected.txt");
+            File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + pass.getIndex() + ".txt");
+
+            System.out.println("in");
+
+            try {
+                Files.copy(oldFile.toPath(), newFile.toPath());
+                System.out.println("File copied.");
+            } catch (Exception e) {
+                System.out.println("FAILED TO UPDATE INDEX");
+            }
+
+            System.out.println("out");
+
+            break;
+        }
+
+        openNewScene();
 
     }
 
-    //TODO ADD
+    public void openNewScene(){
+
+
+
+    }
+
     @FXML
     public void saveList() {
         // create an observable list with all selected items
@@ -178,7 +191,34 @@ public class ListToDoController {
         //     System.out.println(selectedToDos);
         // }
 
-        todoList.getSelectionModel().getSelectedItems();
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        for (ListToDoObj item : selected) {
+
+            saveSingleList(item);
+        }
+    }
+
+    public void saveSingleList(ListToDoObj item) {
+
+        for (int i = 1;; i++) {
+
+            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i);
+            if(!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i).isFile()){
+
+                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
+
+                try {
+                    Files.copy(oldFile.toPath(), newFile.toPath());
+                    System.out.println("File copied.");
+                } catch (Exception e) {
+                    System.out.println("FAILED TO UPDATE INDEX");
+                }
+
+                break;
+            }
+        }
     }
 
     @FXML
@@ -222,7 +262,7 @@ public class ListToDoController {
 
         System.out.println("index: "+ index);
 
-        FileWriter fw = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+        FileWriter fw = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
         fw.write(name + "\n" + index + "\n");
         while(file.hasNextLine()){
             String temp = file.nextLine();
@@ -238,11 +278,11 @@ public class ListToDoController {
         UtilityGeneral.createTempFolder();
 
         if (item.getIndex() == -1) {
+
             int index = UtilityGeneral.indexer();
 
-            FileWriter todoWrite = new FileWriter(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+            FileWriter todoWrite = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
 
-            //todoWrite.write("&NTDL\n");
             todoWrite.write(item + "\n");
 
             todoWrite.close();
@@ -254,15 +294,17 @@ public class ListToDoController {
             int index = item.getIndex();
             StringBuilder data = new StringBuilder();
 
-            File editedDataFile = new File(UtilityGeneral.userDirec() + "\\list_" + index + ".txt");
+            File editedDataFile = new File(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
             BufferedReader reader = new BufferedReader(new FileReader(editedDataFile));
 
+            reader.readLine();
+
             String newName = titleToDoTextBox.getText();
-            data.append(newName).append("\n").append(index);
+            data.append(newName).append("\n");
 
             String line = reader.readLine();
             while (line != null) {
-                data.append(line);
+                data.append(line).append("\n");
                 line = reader.readLine();
             }
 
@@ -284,8 +326,8 @@ public class ListToDoController {
 
         for (int i = index; i < allItems.size(); i++) {
 
-            File newFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i + 1) + ".txt");
-            File oldFile = new File(UtilityGeneral.userDirec() + "\\list_" + (i) + ".txt");
+            File newFile = new File(UtilityGeneral.tempDirec() + "\\list_" + (i + 1) + ".txt");
+            File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + (i) + ".txt");
 
             try {
                 if(newFile.renameTo(oldFile)){
@@ -297,8 +339,6 @@ public class ListToDoController {
 
         }
     }
-
-
 
 }
 

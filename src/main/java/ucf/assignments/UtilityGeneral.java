@@ -1,7 +1,6 @@
 package ucf.assignments;
 
 import java.io.File;
-import java.io.FileWriter;
 
 public class UtilityGeneral {
 
@@ -16,7 +15,7 @@ public class UtilityGeneral {
     }
 
     public static void createTempFolder(){
-        String path = userDirec();
+        String path = tempDirec();
 
         File ToDoFolder = new File(path);
         if(ToDoFolder.mkdir()){
@@ -26,7 +25,7 @@ public class UtilityGeneral {
 
     public static int indexer(){
         int i;
-        String path = userDirec();
+        String path = tempDirec();
 
         for(i = 1; i < 100 + 1; i++){
             File test = new File(path + "\\list_" + i + ".txt");
@@ -38,7 +37,7 @@ public class UtilityGeneral {
         return i;
     }
 
-    public static String userDirec() {
+    public static String tempDirec() {
         // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
 
         return System.getProperty("user.dir") + "\\.temp";
@@ -46,7 +45,7 @@ public class UtilityGeneral {
 
     public static void removeTempFiles(){
 
-        String path = UtilityGeneral.userDirec();
+        String path = UtilityGeneral.tempDirec();
 
         for (int i = 0; i < 100; i++) {
 
