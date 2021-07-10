@@ -59,6 +59,15 @@ public class UtilityGeneral {
             }
 
         }
+
+        File previousSelected = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
+        try{
+            if(previousSelected.delete()){
+                System.out.println("Deleted selected.txt successfully.");
+            }
+        } catch (Exception e){
+            System.out.println("Failed to delete selected.txt");
+        }
     }
 
 }
