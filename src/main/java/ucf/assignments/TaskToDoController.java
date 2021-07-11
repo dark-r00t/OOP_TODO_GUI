@@ -156,7 +156,6 @@ public class TaskToDoController {
         item.setComplete(false);
     }
 
-    // TODO here
     @FXML
     public void deleteTaskButton() {
         // update selected to every selected item
@@ -251,7 +250,6 @@ public class TaskToDoController {
         selected = taskList.getSelectionModel().getSelectedItems();
 
         for (String taskSelected : selected) {
-            int i = 0;
             for (TaskToDoObj taskToInspect : tasks) {
                 if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
                     try {
@@ -264,7 +262,6 @@ public class TaskToDoController {
                     }
                     break;
                 }
-                i++;
             }
             break;
         }
@@ -275,7 +272,7 @@ public class TaskToDoController {
         // change the description with what's in the text field
         // - only if the provided description is <= 256
 
-        String newDescription = updateTaskTextBox.getText();
+        String newDescription = getTypedDescription();
 
         try {
             if (newDescription.length() <= 256) {
@@ -300,7 +297,6 @@ public class TaskToDoController {
         selected = taskList.getSelectionModel().getSelectedItems();
 
         for (String taskSelected : selected) {
-            int i = 0;
             for (TaskToDoObj taskToInspect : tasks) {
                 if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
                     try {
@@ -312,7 +308,6 @@ public class TaskToDoController {
                     }
                     break;
                 }
-                i++;
             }
             break;
         }
@@ -323,7 +318,7 @@ public class TaskToDoController {
         // change the date with what's in the text field
         // - only if the provided date is in the correct format
 
-        String newDate = updateTaskTextBox.getText();
+        String newDate = getTypedDate();
 
         try {
             if (CastedUtilityGeneral.checkDateFormat(newDate)) {
@@ -358,6 +353,11 @@ public class TaskToDoController {
     }
 
     public void save(int i) {
+        // create a file with provided index at ToDO_Files/save_found-index#.txt
+        // try to compile all the contents with in the tasks linked list into a single string
+        // replace back to back newlines with a single newline for as long as there is a back to back new line
+        // remove additional new line from the file
+        // write compounded string into the save file
 
         File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
 
@@ -379,31 +379,28 @@ public class TaskToDoController {
             FileWriter fw = new FileWriter(newFile);
             fw.write(output);
             fw.close();
-
         } catch (IOException e) {
             System.out.println("Failed to add additional tasks to the save file.");
         }
-
     }
 
     @FXML
     public void goBack() throws IOException {
-        // prompt to see if user wants to save
-        // - call save()
-        // close any open files
-        // load ToDoMenu scene when clicked
+        // call the menu scene
 
         SceneController.switchToMenu();
     }
 
     @FXML
     public void helpTask() throws IOException {
+        // call help screen
 
         SceneController.taskHelp();
     }
 
     @FXML
     public void refreshButton() {
+        // takes data inside of selected.txt and transforms it into a linked list
 
         tasks = FileHandler.tasks();
         removeAll();
@@ -412,12 +409,17 @@ public class TaskToDoController {
 
     @FXML
     public void clearAll() throws IOException {
+        // calls writeHeader() to retain list name
+        // ignores all other data
+        // updates screen
 
         FileHandler.writeHeader();
         removeAll();
     }
 
     public void removeAll() {
+        // while there is an item in the display
+        // remove it
 
         while (!taskList.getItems().isEmpty()) {
             try {
@@ -430,6 +432,8 @@ public class TaskToDoController {
 
     //TODO FIX ALIGNMENT ISSUES
     public void generalDisplaySetup(TaskToDoObj task) {
+        // add name description and date with appropriate spacing and adds the string into the view
+
         StringBuilder items = new StringBuilder();
 
         items.append(task.getName());
@@ -445,19 +449,23 @@ public class TaskToDoController {
         items.append((task.getDate()));
 
         taskList.getItems().add(items.toString());
-
-        // System.out.println(items);
     }
 
     public String getTypedTitle() {
+        // get data from title task text box and returns the string
+
         return titleTaskTextBox.getText();
     }
 
     public String getTypedDate() {
+        // get data from date task text box and returns the string
+
         return dateTextBox.getText();
     }
 
     public String getTypedDescription() {
+        // get data from description task text box and returns the string
+
         return descriptionTaskTextBox.getText();
     }
 
