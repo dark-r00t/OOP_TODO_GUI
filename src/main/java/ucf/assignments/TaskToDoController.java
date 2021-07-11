@@ -40,7 +40,11 @@ public class TaskToDoController {
         // call displayAll()
 
         removeAll();
-        displayAll();
+
+        for (TaskToDoObj task : tasks) {
+            String data = displayAll(task);
+            taskList.getItems().add(data);
+        }
     }
 
     @FXML
@@ -52,7 +56,8 @@ public class TaskToDoController {
 
         for (TaskToDoObj task : tasks) {
             if (task.isComplete()) {
-                displayCompleted(task);
+                String data = displayCompleted(task, task.isComplete());
+                taskList.getItems().add(data);
             }
         }
     }
@@ -66,7 +71,8 @@ public class TaskToDoController {
 
         for (TaskToDoObj task : tasks) {
             if (!task.isComplete()) {
-                displayIncomplete(task);
+                String data = displayIncomplete(task, task.isComplete());
+                taskList.getItems().add(data);
             }
         }
     }
@@ -156,7 +162,10 @@ public class TaskToDoController {
                             editDescription(taskToInspect, newDescription);
                         }
                         removeAll();
-                        displayAll();
+                        for (TaskToDoObj task : tasks) {
+                            String data = displayAll(task);
+                            taskList.getItems().add(data);
+                        }
                     } catch (Exception e) {
                         System.out.println("Failed to edit description.");
                     }
@@ -178,13 +187,20 @@ public class TaskToDoController {
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
+        String newDate = updateTaskTextBox.getText();
+
         for (String taskSelected : selected) {
             for (TaskToDoObj taskToInspect : tasks) {
                 if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
                     try {
-                        changeDate(taskToInspect);
+                        if (!newDate.equalsIgnoreCase("")) {
+                            editDate(taskToInspect, newDate);
+                        }
                         removeAll();
-                        displayAll();
+                        for (TaskToDoObj task : tasks) {
+                            String data = displayAll(task);
+                            taskList.getItems().add(data);
+                        }
                     } catch (Exception e) {
                         System.out.println("Failed to edit description.");
                     }
@@ -196,7 +212,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void saveAllToDoButton() {
+    public void saveAllToDoButton() throws IOException {
         // finds the correct index to store the file
         // calls save() with found index
         // opens save popup to display name of saved file and the path
@@ -206,7 +222,12 @@ public class TaskToDoController {
 
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-                save(i);
+                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                FileWriter fw = new FileWriter(newFile);
+                String output = save(tasks);
+
+                fw.write(output);
+                fw.close();
 
                 SceneController.savePopUp("save_" + i + ".txt");
 
@@ -237,9 +258,11 @@ public class TaskToDoController {
         tasks = FileHandler.tasks();
 
         removeAll();
-        displayAll();
+        for (TaskToDoObj task : tasks) {
+            String data = displayAll(task);
+            taskList.getItems().add(data);
+        }
     }
-
 
     @FXML
     public void clearAll() throws IOException {
@@ -261,18 +284,16 @@ public class TaskToDoController {
         }
     }
 
-    public void displayAll() {
+    public static String displayAll(TaskToDoObj task) {
         // for every available task call generalDisplaySetup()
 
         try {
-            for (TaskToDoObj task : tasks) {
-                String data = generalDisplaySetup(task);
-                System.out.println(data);
-                taskList.getItems().add(data);
-            }
+            return generalDisplaySetup(task);
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
+
+        return "";
     }
 
     public void removeAll() {
@@ -288,36 +309,42 @@ public class TaskToDoController {
         }
     }
 
-    public void displayCompleted(TaskToDoObj task) {
+    public static String displayCompleted(TaskToDoObj task, boolean status) {
         // attempt to display task input
 
-        try {
-            String data = generalDisplaySetup(task);
-            taskList.getItems().add(data);
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
+        if(status){
+            try {
+                return generalDisplaySetup(task);
+            } catch (Exception e) {
+                System.out.println("Failed to display all items.");
+            }
         }
+
+        return "";
     }
 
-    public void displayIncomplete(TaskToDoObj task) {
+    public static String displayIncomplete(TaskToDoObj task, boolean status) {
         // attempt to display task input
 
-        try {
-            String data = generalDisplaySetup(task);
-            taskList.getItems().add(data);
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
+        if(!status){
+            try {
+                return generalDisplaySetup(task);
+            } catch (Exception e) {
+                System.out.println("Failed to display all items.");
+            }
         }
+
+        return "";
     }
 
-    public void markAsComplete(TaskToDoObj item) {
+    public static void markAsComplete(TaskToDoObj item) {
         // take a TaskToDo object
         // check its complete status to true
 
         item.setComplete(true);
     }
 
-    public void markAsIncomplete(TaskToDoObj item) {
+    public static void markAsIncomplete(TaskToDoObj item) {
         // take a TaskToDo object
         // check its complete status to false
 
@@ -404,32 +431,31 @@ public class TaskToDoController {
         return false;
     }
 
-    public void changeDate(TaskToDoObj item) {
+    public static boolean editDate(TaskToDoObj item, String newDate) {
         // take in an item
         // change the date with what's in the text field
         // - only if the provided date is in the correct format
 
-        String newDate = updateTaskTextBox.getText();
-
         try {
             if (CastedUtilityGeneral.checkDateFormat(newDate)) {
                 item.setDate(newDate);
+                return true;
             } else {
                 System.out.println("Date is not in the correct format.");
             }
         } catch (Exception e) {
-            System.out.println("Invalid item selected, cannot change the description.");
+            System.out.println("Invalid item selected, cannot change the date.");
         }
+
+        return false;
     }
 
-    public void save(int i) {
+    public static String save(LinkedList<TaskToDoObj> list) {
         // create a file with provided index at ToDO_Files/save_found-index#.txt
         // try to compile all the contents with in the tasks linked list into a single string
         // replace back to back newlines with a single newline for as long as there is a back to back new line
         // remove additional new line from the file
         // write compounded string into the save file
-
-        File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
 
         try {
             StringBuilder content = new StringBuilder();
@@ -439,8 +465,8 @@ public class TaskToDoController {
 
             content.append(list_title).append("\n");
 
-            for (TaskToDoObj task : tasks) {
-                content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
+            for (TaskToDoObj list_item : list) {
+                content.append(list_item.getName()).append("\n").append(list_item.getDate()).append("\n").append(list_item.getDescription()).append("\n").append(list_item.isComplete()).append("\n");
             }
 
             String output = content.toString();
@@ -451,12 +477,12 @@ public class TaskToDoController {
 
             output = output.substring(0, output.length() - 1);
 
-            FileWriter fw = new FileWriter(newFile);
-            fw.write(output);
-            fw.close();
+            return output;
         } catch (IOException e) {
             System.out.println("Failed to add additional tasks to the save file.");
         }
+
+        return "";
     }
 
     //TODO FIX ALIGNMENT ISSUES

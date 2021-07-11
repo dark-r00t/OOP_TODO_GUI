@@ -5,9 +5,12 @@
 
 package ucf.assignments;
 
-import javafx.scene.control.ListView;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +70,7 @@ class ToDoTest {
     @Test
     void due_date_display() {
 
-        String display = "testing";
+        String display;
 
         String date = "2021-01-01";
 
@@ -168,55 +171,155 @@ class ToDoTest {
     }
 
     @Test
-    void change_date(){
+    void change_date() {
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
 
+        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+
+        boolean change = TaskToDoController.editDate(item, "9999-01-01");
+
+        if (change) {
+            assertEquals("9999-01-01", item.getDate());
+        } else {
+            fail();
+        }
     }
 
     @Test
-    void mark_complete(){
+    void mark_complete() {
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
 
+        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+
+        TaskToDoController.markAsComplete(item);
+
+        assertTrue(item.isComplete());
     }
 
     @Test
-    void mark_incomplete(){
+    void mark_incomplete() {
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
 
+        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+
+        item.setComplete(true);
+
+        if (item.isComplete()) {
+            TaskToDoController.markAsIncomplete(item);
+        } else {
+            fail();
+        }
+
+        assertFalse(item.isComplete());
     }
 
     @Test
-    void all_items_display(){
+    void all_items_display() {
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
 
+        TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+
+        String actual = TaskToDoController.displayAll(item);
+
+        String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
+
+        if(actual.length() >= 189){
+            assertEquals(actual, expected);
+        } else {
+            fail();
+        }
     }
 
     @Test
-    void complete_items_display(){
+    void complete_items_display() {
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
 
+        TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+
+        item.setComplete(true);
+
+        String actual = TaskToDoController.displayCompleted(item, item.isComplete());
+
+        String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
+
+        if(item.isComplete()){
+            assertEquals(actual, expected);
+        } else {
+            fail();
+        }
     }
 
     @Test
-    void incomplete_items_display(){
+    void incomplete_items_display() {
 
 
+        String title = "title";
+        String description = "desc";
+        String date = "2021-11-11";
+
+        TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+
+        item.setComplete(false);
+
+        String actual = TaskToDoController.displayIncomplete(item, item.isComplete());
+
+        String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
+
+        if(actual.length() >= 189){
+            assertEquals(actual, expected);
+        } else {
+            fail();
+        }
     }
 
     @Test
-    void save(){
+    void save() throws IOException {
+        CastedUtilityGeneral.addToDoSaveFolder();
+        CastedUtilityGeneral.createTempFolder();
 
+        File savedOutput = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_999.txt");
 
+        FileWriter fw = new FileWriter(savedOutput);
+
+        LinkedList<TaskToDoObj> tasks = new LinkedList<>();
+
+        for (int i = 1; i <= 125; i++) {
+            String title = "title_" + i;
+            String description = "description";
+            String date = "2021-11-11";
+
+            try {
+                TaskToDoController.generateNewTask(tasks, title, description, date);
+            } catch (Exception e) {
+                System.out.println("Failed.");
+            }
+        }
+
+        String output = TaskToDoController.save(tasks);
+
+        fw.write(output);
+        fw.close();
+
+        assertTrue(savedOutput.exists() && tasks.size() == 125);
     }
 
     @Test
-    void load_list(){
-
-
-    }
-
-    @Test
-    void Rey_tribute(){
+    void load_list() {
 
 
     }
