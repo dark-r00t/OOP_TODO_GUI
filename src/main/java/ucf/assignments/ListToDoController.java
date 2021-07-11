@@ -207,6 +207,8 @@ public class ListToDoController {
                         System.out.println("Failed to copy files.");
                     }
 
+                    SceneController.savePopUp("save_" + item.getIndex() + ".txt");
+
                     break;
                 }
             }

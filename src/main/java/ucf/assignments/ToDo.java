@@ -25,10 +25,8 @@ public class ToDo extends Application {
         try {
 
             UtilityGeneral.addToDoSaveFolder();
-
             UtilityGeneral.removeTempFiles();
 
-            // TODO CHANGE BACK TO MENU
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ToDoMenu.fxml")));
 
             Scene scene = new Scene(root);
@@ -42,3 +40,7 @@ public class ToDo extends Application {
         }
     }
 }
+
+//TODO update help scene
+//TODO update puml
+//TODO create test cases

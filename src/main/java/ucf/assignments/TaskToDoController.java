@@ -6,10 +6,11 @@
 package ucf.assignments;
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,19 +22,15 @@ public class TaskToDoController {
     public SplitPane mainPane;
     public SplitPane splitPane;
     public TextField descriptionTaskTextBox;
-    public DatePicker dataTextBox;
+    public TextField dateTextBox;
     public TextField titleTaskTextBox;
     public TextField updateTaskTextBox;
     public ListView<String> taskList;
     public ObservableList<String> selected;
     public static LinkedList<TaskToDoObj> tasks;
 
-    // on open delete data in temp.txt
-    // create linked list of ToDoItem objects
-    // define a global variable for the user directory
-
     @FXML
-    public void listClicked(MouseEvent mouseEvent) {
+    public void listClicked() {
         // allow for multiple items
         // save 'selected' accordingly
 
@@ -42,7 +39,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void displayAllTasksButton(ActionEvent actionEvent) {
+    public void displayAllTasksButton() {
         // call displayAll()
 
         removeAll();
@@ -66,7 +63,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void displayCompletedTasksButton(ActionEvent actionEvent) {
+    public void displayCompletedTasksButton() {
         // call displayCompleted()
 
         removeAll();
@@ -95,7 +92,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void displayIncompleteTasksButton(ActionEvent actionEvent) {
+    public void displayIncompleteTasksButton() {
         // call displayIncomplete()
 
         removeAll();
@@ -124,7 +121,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void markAsCompleteButton(ActionEvent actionEvent) {
+    public void markAsCompleteButton() {
         // call markAsComplete()
 
         selected = taskList.getSelectionModel().getSelectedItems();
@@ -171,7 +168,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void deleteTaskButton(ActionEvent actionEvent) throws IOException {
+    public void deleteTaskButton() {
         // call deleteTask()
 
         selected = taskList.getSelectionModel().getSelectedItems();
@@ -181,8 +178,7 @@ public class TaskToDoController {
 
                 deleteTask(task);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Failed to remove item...");
         }
     }
@@ -192,7 +188,7 @@ public class TaskToDoController {
         // remove item
 
         for (int i = 0; i < tasks.size(); i++) {
-            if (task.contains(tasks.get(i).getName())){
+            if (task.contains(tasks.get(i).getName())) {
                 try {
                     FileHandler.renewFileAfterDelete(tasks.get(i));
 
@@ -208,10 +204,10 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void addNewTaskButton(ActionEvent actionEvent) {
+    public void addNewTaskButton() {
         // call addNewTask()
 
-
+        addNewTask();
     }
 
     public void addNewTask() {
@@ -220,10 +216,31 @@ public class TaskToDoController {
         // add obj to linked list
         // update display
 
+        String title = getTypedTitle();
+        String description = getTypedDescription();
+        String date = getTypedDate();
+
+        if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
+            System.out.println("Missing information in text field.");
+        } else {
+            generateNewTask(title, description, date);
+        }
     }
 
+    public void generateNewTask(String title, String description, String date) {
+
+        try {
+            TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+            tasks.add(item);
+            generalDisplaySetup(item);
+        } catch (Exception e) {
+            System.out.println("Failed to create a new task.");
+        }
+    }
+
+    //TODO ADD
     @FXML
-    public void editDescription(ActionEvent actionEvent) {
+    public void editDescription() {
         // call editDescriptionInit()
 
 
@@ -237,8 +254,9 @@ public class TaskToDoController {
 
     }
 
+    //TODO ADD
     @FXML
-    public void changeDate(ActionEvent actionEvent) {
+    public void changeDate() {
         // call changeDateInit()
 
 
@@ -263,7 +281,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void saveAllToDoButton(ActionEvent actionEvent) {
+    public void saveAllToDoButton() throws IOException {
         // call save()
 
         selected = taskList.getSelectionModel().getSelectedItems();
@@ -274,33 +292,30 @@ public class TaskToDoController {
     public void save() {
         // call saveList from ToDoControllerMenu w/ the currently selected list
 
-        for (String item : selected) {
+        for (int i = 1; ; i++) {
 
-            System.out.println("in " + item);
+            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+            if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
 
-            for (int i = 1; ; i++) {
+                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                File oldFile = new File(UtilityGeneral.tempDirec() + "\\selected.txt");
 
-                System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-
-                    File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                    File oldFile = new File(UtilityGeneral.tempDirec() + "\\selected.txt");
-
-                    try {
-                        Files.copy(oldFile.toPath(), newFile.toPath());
-                        System.out.println("File copied.");
-                    } catch (Exception e) {
-                        System.out.println("Failed to copy files.");
-                    }
-
-                    break;
+                try {
+                    Files.copy(oldFile.toPath(), newFile.toPath());
+                    System.out.println("File copied.");
+                } catch (Exception e) {
+                    System.out.println("Failed to copy files.");
                 }
+
+                SceneController.savePopUp("save_" + i + ".txt");
+
+                break;
             }
         }
     }
 
     @FXML
-    public void goBack(ActionEvent actionEvent) throws IOException {
+    public void goBack() throws IOException {
         // prompt to see if user wants to save
         // - call save()
         // close any open files
@@ -323,6 +338,13 @@ public class TaskToDoController {
         displayAll();
     }
 
+    @FXML
+    public void clearAll() throws IOException {
+
+        FileHandler.writeHeader();
+        removeAll();
+    }
+
     public void removeAll() {
 
         while (!taskList.getItems().isEmpty()) {
@@ -334,22 +356,36 @@ public class TaskToDoController {
         }
     }
 
+    //TODO FIX ALIGNMENT ISSUES
     public void generalDisplaySetup(TaskToDoObj task) {
         StringBuilder items = new StringBuilder();
 
         items.append(task.getName());
-        while (items.length() != 50) {
+        while (items.toString().length() != 50 + 10) {
             items.append(" ");
         }
 
         items.append(task.getDescription());
-        while (items.length() != 50 + 139) {
+        while (items.toString().length() != 60 + 119) {
             items.append(" ");
         }
 
         items.append((task.getDate()));
 
         taskList.getItems().add(items.toString());
+        System.out.println(items);
+    }
+
+    public String getTypedTitle() {
+        return titleTaskTextBox.getText();
+    }
+
+    public String getTypedDate() {
+        return dateTextBox.getText();
+    }
+
+    public String getTypedDescription() {
+        return descriptionTaskTextBox.getText();
     }
 
 }

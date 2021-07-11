@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class FileHandler {
 
-    public static LinkedList<TaskToDoObj> tasks() throws FileNotFoundException {
+    public static LinkedList<TaskToDoObj> tasks() {
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
@@ -53,6 +53,18 @@ public class FileHandler {
         fileContent = removeTaskFileData(fileContent, item);
 
         fileSelectedGenerator(fileContent);
+    }
+
+    public static void writeHeader() throws IOException {
+
+        StringBuilder output = new StringBuilder();
+        File document = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
+        Scanner scanner = new Scanner(document);
+
+        output.append(scanner.nextLine());
+        scanner.close();
+
+        fileSelectedGenerator(output.toString());
     }
 
     private static String readSelectedFile() throws FileNotFoundException {
