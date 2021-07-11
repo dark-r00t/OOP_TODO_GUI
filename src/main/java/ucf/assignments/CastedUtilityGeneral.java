@@ -8,7 +8,7 @@ package ucf.assignments;
 
 import java.io.File;
 
-public class UtilityGeneral {
+public class CastedUtilityGeneral {
 
     public static void addToDoSaveFolder() {
 
@@ -51,7 +51,7 @@ public class UtilityGeneral {
 
     public static void removeTempFiles() {
 
-        String path = UtilityGeneral.tempDirec();
+        String path = CastedUtilityGeneral.tempDirec();
 
         for (int i = 0; i < 100; i++) {
 
@@ -61,15 +61,15 @@ public class UtilityGeneral {
             File index = new File(newPath);
 
             if (index.delete()) {
-                System.out.println("Deleted list_" + item + ".txt successfully.");
+                System.out.println("Removed " + "list_" + item + ".txt");
             }
 
         }
 
-        File previousSelected = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
+        File previousSelected = new File(tempDirec() + "\\selected.txt");
         try {
             if (previousSelected.delete()) {
-                System.out.println("Deleted selected.txt successfully.");
+                System.out.println("Removed selected.txt");
             }
         } catch (Exception e) {
             System.out.println("Failed to delete selected.txt");

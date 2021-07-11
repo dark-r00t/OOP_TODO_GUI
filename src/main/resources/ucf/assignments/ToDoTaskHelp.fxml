@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="432.0" prefWidth="728.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.ToDoTaskHelpController">
+<AnchorPane prefHeight="432.0" prefWidth="728.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.HelpToDoTaskController">
     <children>
         <Label layoutX="14.0" layoutY="52.0" text="&quot;Add New To-Do&quot; requires a name, date, and description." />
         <Label layoutX="11.0" layoutY="96.0" text="&quot;Edit description requires a name in the tex-filed and a selected item in the text field above it." />

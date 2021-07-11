@@ -24,8 +24,8 @@ public class ToDo extends Application {
     public void start(Stage primaryStage) {
         try {
 
-            UtilityGeneral.addToDoSaveFolder();
-            UtilityGeneral.removeTempFiles();
+            CastedUtilityGeneral.addToDoSaveFolder();
+            CastedUtilityGeneral.removeTempFiles();
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ToDoMenu.fxml")));
 

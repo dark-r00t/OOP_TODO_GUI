@@ -85,7 +85,6 @@ public class SceneController {
         Scene scene = new Scene(popup,500,100);
 
         stage.setScene(scene);
-        stage.setTitle("Save Notification");
         stage.show();
     }
 

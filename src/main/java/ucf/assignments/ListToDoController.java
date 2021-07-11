@@ -83,7 +83,7 @@ public class ListToDoController {
     }
 
     public void removeFile(int txt) {
-        String path = UtilityGeneral.tempDirec();
+        String path = CastedUtilityGeneral.tempDirec();
 
         String newPath = path + "\\list_" + txt + ".txt";
 
@@ -127,7 +127,6 @@ public class ListToDoController {
 
         // code idea?
         todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        System.out.println(todoList);
     }
 
     @FXML
@@ -148,20 +147,14 @@ public class ListToDoController {
         for (ListToDoObj i : selected) {
             pass = i;
 
-            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + pass.getIndex());
-            File newFile = new File(UtilityGeneral.tempDirec() + "\\selected.txt");
-            File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + pass.getIndex() + ".txt");
-
-            System.out.println("in");
+            File newFile = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
+            File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + pass.getIndex() + ".txt");
 
             try {
                 Files.copy(oldFile.toPath(), newFile.toPath());
-                System.out.println("File copied.");
             } catch (Exception e) {
-                System.out.println("FAILED TO UPDATE INDEX");
+                System.out.println("Failed to update index.");
             }
-
-            System.out.println("out");
 
             break;
         }
@@ -191,18 +184,15 @@ public class ListToDoController {
         for (ListToDoObj item : selected) {
 
             for (int i = 1; ; i++) {
-
-                System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
                 if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
 
                     System.out.println(item.getIndex());
 
                     File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                    File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
+                    File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
 
                     try {
                         Files.copy(oldFile.toPath(), newFile.toPath());
-                        System.out.println("File copied.");
                     } catch (Exception e) {
                         System.out.println("Failed to copy files.");
                     }
@@ -253,9 +243,7 @@ public class ListToDoController {
         addItem(name);
         int index = allItems.size();
 
-        System.out.println("index: " + index);
-
-        FileWriter fw = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
+        FileWriter fw = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
         fw.write(name + "\n");
         while (file.hasNextLine()) {
             String temp = file.nextLine();
@@ -268,13 +256,13 @@ public class ListToDoController {
     }
 
     public void storeData(ListToDoObj item) throws IOException {
-        UtilityGeneral.createTempFolder();
+        CastedUtilityGeneral.createTempFolder();
 
         if (item.getIndex() == -1) {
 
-            int index = UtilityGeneral.indexer();
+            int index = CastedUtilityGeneral.indexer();
 
-            FileWriter todoWrite = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
+            FileWriter todoWrite = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
 
             todoWrite.write(item + "\n");
 
@@ -287,7 +275,7 @@ public class ListToDoController {
             int index = item.getIndex();
             StringBuilder data = new StringBuilder();
 
-            File editedDataFile = new File(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
+            File editedDataFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
             BufferedReader reader = new BufferedReader(new FileReader(editedDataFile));
 
             reader.readLine();
@@ -319,12 +307,12 @@ public class ListToDoController {
 
         for (int i = index; i < allItems.size(); i++) {
 
-            File newFile = new File(UtilityGeneral.tempDirec() + "\\list_" + (i + 1) + ".txt");
-            File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + (i) + ".txt");
+            File newFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + (i + 1) + ".txt");
+            File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + (i) + ".txt");
 
             try {
                 if (newFile.renameTo(oldFile)) {
-                    System.out.println("File copied.");
+                    return;
                 }
             } catch (Exception e) {
                 System.out.println("FAILED TO UPDATE INDEX");

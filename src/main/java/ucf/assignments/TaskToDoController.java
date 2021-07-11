@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
@@ -35,7 +36,6 @@ public class TaskToDoController {
         // save 'selected' accordingly
 
         taskList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        System.out.println(taskList);
     }
 
     @FXML
@@ -59,7 +59,6 @@ public class TaskToDoController {
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
-        System.out.println("Displayed all items in list.");
     }
 
     @FXML
@@ -88,7 +87,6 @@ public class TaskToDoController {
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
-        System.out.println("Displayed all of the completed items in list.");
     }
 
     @FXML
@@ -117,7 +115,6 @@ public class TaskToDoController {
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
-        System.out.println("Displayed all of the incompleted items in list.");
     }
 
     @FXML
@@ -194,8 +191,6 @@ public class TaskToDoController {
 
                     tasks.remove(i);
                     taskList.getItems().remove(task);
-
-                    System.out.println("Item " + i + " was removed.");
                 } catch (Exception e) {
                     System.out.println("Failed to remove item.");
                 }
@@ -293,16 +288,37 @@ public class TaskToDoController {
         // call saveList from ToDoControllerMenu w/ the currently selected list
 
         for (int i = 1; ; i++) {
-
-            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-
                 File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                File oldFile = new File(UtilityGeneral.tempDirec() + "\\selected.txt");
+                File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
+
+                try {
+                    StringBuilder content = new StringBuilder(FileHandler.removeExtraNewLines());
+
+                    for (int j = 0; j < tasks.size(); j++) {
+                        if(!content.toString().contains(tasks.get(j).getName()) && !content.toString().contains(tasks.get(j).getDescription())){
+                            content.append(tasks.get(j).getName()).append("\n").append(tasks.get(j).getDate()).append("\n").append(tasks.get(j).getDescription()).append("\n").append(tasks.get(j).isComplete()).append("\n");
+                        }
+                    }
+
+                    String output = content.toString();
+
+                    while(output.contains("\n\n")){
+                        output = output.replace("\n\n", "\n");
+                    }
+
+                    output = output.substring(0, output.length() - 1);
+
+                    FileWriter fw = new FileWriter(oldFile);
+                    fw.write(output);
+                    fw.close();
+
+                } catch (IOException e) {
+                    System.out.println("Failed to add additional tasks to the save file.");
+                }
 
                 try {
                     Files.copy(oldFile.toPath(), newFile.toPath());
-                    System.out.println("File copied.");
                 } catch (Exception e) {
                     System.out.println("Failed to copy files.");
                 }
@@ -373,7 +389,6 @@ public class TaskToDoController {
         items.append((task.getDate()));
 
         taskList.getItems().add(items.toString());
-        System.out.println(items);
     }
 
     public String getTypedTitle() {

@@ -80,6 +80,16 @@ public class FileHandler {
         return output.toString();
     }
 
+    public static String removeExtraNewLines() throws FileNotFoundException {
+        String file = readSelectedFile();
+
+        while(file.contains("\n\n")){
+            file = file.replace("\n\n", "\n");
+        }
+
+        return file;
+    }
+
     private static void fileSelectedGenerator(String fileString) throws IOException {
 
         String output = System.getProperty("user.dir") + "\\.temp\\selected.txt";
