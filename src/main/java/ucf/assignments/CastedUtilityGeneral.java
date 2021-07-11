@@ -7,10 +7,14 @@
 package ucf.assignments;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CastedUtilityGeneral {
 
     public static void addToDoSaveFolder() {
+        // Check to see if there is a file called ToDo-Files
+        // if there is not create one
 
         String path = System.getProperty("user.dir") + "\\ToDo_Files";
 
@@ -21,6 +25,9 @@ public class CastedUtilityGeneral {
     }
 
     public static void createTempFolder() {
+        // Check to see if there is a file called .temp
+        // if there is not create one
+
         String path = tempDirec();
 
         File ToDoFolder = new File(path);
@@ -30,6 +37,9 @@ public class CastedUtilityGeneral {
     }
 
     public static int indexer() {
+        // looks in .temp for the next available list_#
+        // returns the available index
+
         int i;
         String path = tempDirec();
 
@@ -44,24 +54,28 @@ public class CastedUtilityGeneral {
     }
 
     public static String tempDirec() {
-        // modify userDirec so that it's in a specific file path [i.e. /To-Do saves]
+        // returns a string of the .temp folder created in the initial startup
 
         return System.getProperty("user.dir") + "\\.temp";
     }
 
     public static void removeTempFiles() {
 
+        // gets the first 100 list_#.txt files
+        // removes them
+        // prints the deleted files in the console
+        // then removes the other temp file not labled as list_#
+
         String path = CastedUtilityGeneral.tempDirec();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 1; i < 101; i++) {
 
-            int item = i + 1;
-            String newPath = path + "\\list_" + item + ".txt";
+            String newPath = path + "\\list_" + i + ".txt";
 
             File index = new File(newPath);
 
             if (index.delete()) {
-                System.out.println("Removed " + "list_" + item + ".txt");
+                System.out.println("Removed " + "list_" + i + ".txt");
             }
 
         }
@@ -77,7 +91,12 @@ public class CastedUtilityGeneral {
     }
 
     public static boolean checkDateFormat(String date){
-        // YYYY-MM-DD
+
+        // takes a string from a date input
+        // check to see if its in YYYY-MM-DD format
+        // check to see if the year is at least the year of the systems year
+        // check to see if the day/month inputs are valid
+        // if everything is good return true
 
         StringBuilder year = new StringBuilder();
         StringBuilder month = new StringBuilder();
@@ -90,9 +109,29 @@ public class CastedUtilityGeneral {
             day.append(date.charAt(8)).append(date.charAt(9));
 
             try{
+
+                Calendar systemCalendar = Calendar.getInstance();
+                int systemYear = systemCalendar.get(Calendar.YEAR);
+
                 Integer.parseInt(year.toString());
                 Integer.parseInt(month.toString());
                 Integer.parseInt(day.toString());
+
+                if(Integer.parseInt(year.toString()) < systemYear) {
+                    System.out.println("Year input is less then current year (" + systemYear + ").");
+                    return false;
+                }
+
+                if(Integer.parseInt(month.toString()) < 1 || Integer.parseInt(month.toString()) > 12) {
+                    System.out.println("Month input is out-of-bounds.");
+                    return false;
+                }
+
+                if(Integer.parseInt(day.toString()) < 1 || Integer.parseInt(day.toString()) > 31) {
+                    System.out.println("Day input is out-of-bounds");
+                    return false;
+                }
+
                 return true;
             } catch(NumberFormatException | NullPointerException e) {
                 return false;

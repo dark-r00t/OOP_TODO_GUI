@@ -221,7 +221,7 @@ public class TaskToDoController {
             if (CastedUtilityGeneral.checkDateFormat(date) && description.length() < 256 + 1) {
                 generateNewTask(title, description, date, false);
             } else {
-                System.out.println("Wrong date format!");
+                System.out.println("Please, re-enter the data.");
             }
         }
     }
@@ -237,7 +237,6 @@ public class TaskToDoController {
         }
     }
 
-    //TODO ADD
     @FXML
     public void editDescription() {
         // call editDescriptionInit()
@@ -272,30 +271,39 @@ public class TaskToDoController {
         }
     }
 
-    //TODO ADD
     @FXML
     public void changeDate() {
         // call changeDateInit()
 
+        selected = taskList.getSelectionModel().getSelectedItems();
 
+        for (int i = 0; i < selected.size(); i++) {
+
+            String task = selected.get(i);
+            if (task.contains(tasks.get(i).getName())) {
+                changeDateInit(tasks.get(i), i);
+            }
+        }
     }
 
-    public void changeDateInit() {
+    public void changeDateInit(TaskToDoObj item, int index) {
         // get text from dateTextBox
         // get userSelectedTask
         // check to see if format is correct
         // call modifyDateText()
 
+        String newDate = updateTaskTextBox.getText();
 
-    }
-
-    public void modifyDateText(int location, String newDate) {
-        // run loop to get selected list location in file
-        // find the date
-        // remove old date
-        // append newDate
-
-
+        try {
+            if(CastedUtilityGeneral.checkDateFormat(newDate)){
+                tasks.get(index).setDate(newDate);
+                removeAll();
+                generateNewTask(tasks.get(index).getName(), tasks.get(index).getDescription(), tasks.get(index).getDate(), tasks.get(index).isComplete());
+                tasks.remove(index);
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid item selected, cannot change the description.");
+        }
     }
 
     @FXML
@@ -413,7 +421,7 @@ public class TaskToDoController {
 
         taskList.getItems().add(items.toString());
 
-        System.out.println(items);
+        // System.out.println(items);
     }
 
     public String getTypedTitle() {

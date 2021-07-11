@@ -40,6 +40,9 @@ public class ListToDoController {
 
     public void addItem(String name) throws IOException {
         // take the new item data
+        // add name into a list file
+        // add name into a linked list of every item available
+        // write the list name into it's own file (list_#.txt)
 
         ListToDoObj item = new ListToDoObj(name);
         todoList.getItems().add(item);
@@ -47,42 +50,47 @@ public class ListToDoController {
         allItems.add(item);
 
         storeData(item);
-
-        System.out.println("Added: " + item);
     }
 
     @FXML
     public void deleteToDoButton() {
-        // check to see if the selected list is not empty
-        // call ToDoList.removeItem() w/ the string for the selected list
+        // gets every selected item
+        // run loop for every selected item
+        // call deleteItem(index of selected item)
 
         selected = todoList.getSelectionModel().getSelectedItems();
 
-        deleteItem(selected);
+        for (ListToDoObj i : selected) {
+            deleteItem(i);
+        }
     }
 
-    public void deleteItem(ObservableList<ListToDoObj> selected) {
-        // run loop to find item w/ the same name
-        // remove the item
-        // decrease total amount
+    public void deleteItem(ListToDoObj item) {
+        // update pass (ListTodoObj)
+        // remove that items file from the list
+        // check to see if the deleted item was the last item available
+        // if it wasnt -> update list file index name
+        // reduce index size
+        // remove item from the linked list of objects
+        // remove item from the display listView
 
-        for (ListToDoObj i : selected) {
-            pass = i;
+        pass = item;
 
-            removeFile(pass.getIndex());
+        removeFile(pass.getIndex());
 
-            if (pass.getIndex() != allItems.size()) {
-                updateIndex(pass.getIndex());
-                pass.setIndex(pass.getIndex() - 1);
-            }
-
-            allItems.remove(pass.getIndex() - 1);
-            todoList.getItems().remove(pass.getIndex() - 1);
+        if (pass.getIndex() != allItems.size()) {
+            updateIndex(pass.getIndex());
+            pass.setIndex(pass.getIndex() - 1);
         }
 
+        allItems.remove(pass.getIndex() - 1);
+        todoList.getItems().remove(pass.getIndex() - 1);
     }
 
     public void removeFile(int txt) {
+        // takes the index of the deleted file
+        // removes the specific file from the .temp direc
+
         String path = CastedUtilityGeneral.tempDirec();
 
         String newPath = path + "\\list_" + txt + ".txt";
@@ -96,9 +104,8 @@ public class ListToDoController {
 
     @FXML
     public void editNameToDoButton() throws IOException {
-        // check to see if the selected list is not empty
-        // get data from text box
-        // call ToDoList.editName() w/ data from selected string and textbox
+        // get every selected item
+        // for every item selected call edit name with the selected object
 
         selected = todoList.getSelectionModel().getSelectedItems();
 
@@ -109,8 +116,9 @@ public class ListToDoController {
     }
 
     public void editName(ListToDoObj item) throws IOException {
-        // search for the selected list in the LinkedList
-        // change the name w/ string from newName
+        // set the temp object equal to the item object
+        // store temp w/ the new name
+        // update the objects in the display
 
         temp = item;
 
@@ -125,40 +133,42 @@ public class ListToDoController {
         // allow for multiple items
         // save selected accordingly
 
-        // code idea?
         todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     @FXML
     public void selectToDoButton() throws IOException {
-        // check to see if the selected list is not empty
-        // open new scene for ToDofxml w/ data from string selected list
-        // close old scene
+        // get the selected item
+        // call selectToDo()
+        // open new scene
+        // break loop as to only allow for the first clicked item
 
         selected = todoList.getSelectionModel().getSelectedItems();
 
-        selectToDo();
-        SceneController.switchToTask();
-
-    }
-
-    public void selectToDo() {
-
         for (ListToDoObj i : selected) {
-            pass = i;
 
-            File newFile = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
-            File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + pass.getIndex() + ".txt");
-
-            try {
-                Files.copy(oldFile.toPath(), newFile.toPath());
-            } catch (Exception e) {
-                System.out.println("Failed to update index.");
-            }
+            selectToDo(i);
+            SceneController.switchToTask();
 
             break;
         }
 
+    }
+
+    public void selectToDo(ListToDoObj item) {
+        // takes the selected item
+        // copies data of the selected item into selected.txt
+
+        pass = item;
+
+        File newFile = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
+        File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + pass.getIndex() + ".txt");
+
+        try {
+            Files.copy(oldFile.toPath(), newFile.toPath());
+        } catch (Exception e) {
+            System.out.println("Failed to update index.");
+        }
     }
 
     @FXML
@@ -168,57 +178,51 @@ public class ListToDoController {
 
         selected = todoList.getSelectionModel().getSelectedItems();
 
-        saveSelectedList();
-    }
-
-    public void saveSelectedList() {
-        // code idea?
-        // String debug = "";
-        // ObservableList<ToDoList> selectedToDos;
-        // selectedToDos = todoList.getSelectionModel().getSelectedItems();
-
-        // for(ToDoList x : selectedToDos){
-        //     System.out.println(selectedToDos);
-        // }
-
         for (ListToDoObj item : selected) {
 
-            for (int i = 1; ; i++) {
-                if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
+            saveSelectedList(item);
+        }
+    }
 
-                    System.out.println(item.getIndex());
+    public void saveSelectedList(ListToDoObj item) {
+        // takes selected item
+        // looks for a valid location to store the list
+        //  - save_available#.txt
+        // copies selected items data into the correct save file
+        // opens popup to show display path
 
-                    File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                    File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
+        for (int i = 1; ; i++) {
+            if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
 
-                    try {
-                        Files.copy(oldFile.toPath(), newFile.toPath());
-                    } catch (Exception e) {
-                        System.out.println("Failed to copy files.");
-                    }
+                System.out.println(item.getIndex());
 
-                    SceneController.savePopUp("save_" + item.getIndex() + ".txt");
+                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
 
-                    break;
+                try {
+                    Files.copy(oldFile.toPath(), newFile.toPath());
+                } catch (Exception e) {
+                    System.out.println("Failed to copy files.");
                 }
+
+                SceneController.savePopUp("save_" + item.getIndex() + ".txt");
+
+                break;
             }
         }
     }
 
     @FXML
     public void loadList() throws IOException {
-        // take a text file w/ a setup of allowing multiple inputs
-        //  FileChooser
-        //  set initial direc
-        //  get all extension filters
-        //  make a List<File> of selected files (show open multiple dialgoue)
-        //  get items and add
-        // load each element into the list view and store into the object list
+        // calls loadListFile()
 
         loadListFile();
     }
 
     public void loadListFile() throws IOException {
+        // sets up initial file direc
+        // takes in multiple files if need be
+        // for every file selected format file using formatFile()
 
         String path = System.getProperty("user.dir");
 
@@ -235,6 +239,12 @@ public class ListToDoController {
     }
 
     public void formatFile(File selectedFile) throws IOException {
+        // takes a file
+        // reads the first line in file (name of the to-do list)
+        // - stores into an available list_#.txt
+        // - adds name of list to the display
+        // - adds item into the linkedList of objects
+        // writes every line afterwards into the file
 
         Scanner file = new Scanner(selectedFile);
 
@@ -256,6 +266,14 @@ public class ListToDoController {
     }
 
     public void storeData(ListToDoObj item) throws IOException {
+        // takes in an item
+        // sets up a .temp folder if one is not already available
+        // if the item is new (index is a -1)
+        // - create new file
+        // if the item is not new (available index)
+        // - takes the index of file and prepares to rewrite it
+        // - replaces item's file data with new data
+
         CastedUtilityGeneral.createTempFolder();
 
         if (item.getIndex() == -1) {
@@ -301,9 +319,11 @@ public class ListToDoController {
     }
 
     public void updateIndex(int index) {
-        // loop
-        // set temp index = i + 1
-        // take temp index data put it into index file
+        // takes in a file index
+        // loop for as many items are in the linked list
+        // set i = file index
+        // create a file with desired index and the actual index
+        // rename file so it matches desired output
 
         for (int i = index; i < allItems.size(); i++) {
 
@@ -312,17 +332,20 @@ public class ListToDoController {
 
             try {
                 if (newFile.renameTo(oldFile)) {
-                    return;
+                    continue;
                 }
             } catch (Exception e) {
-                System.out.println("FAILED TO UPDATE INDEX");
+                System.out.println("Failed to update index.");
             }
+
+            System.out.println(i);
 
         }
     }
 
     @FXML
     public void helpMenu() throws IOException {
+        // opens help scene
 
         SceneController.menuHelp();
     }

@@ -16,10 +16,10 @@ public class FileHandler {
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
-        /*private String name;
-        private String date;
-        private String description;
-        boolean complete;*/
+        // fills up a linked list with data from the previously selected list (selected.txt)
+        // if there is a next line
+        // create a new task object w/ the next 4 lines (name,date,description,completed status)
+        // returns the linked list of task objects
 
         try {
             File selected = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
@@ -48,6 +48,11 @@ public class FileHandler {
 
     public static void renewFileAfterDelete(TaskToDoObj item) throws IOException {
 
+        // after a task is deleted
+        // read the selected.txt file and return the string of the content inside of it
+        // remove deleted item from the string if its exists
+        // rewrite file data with the corrected string data
+
         String fileContent = readSelectedFile();
 
         fileContent = removeTaskFileData(fileContent, item);
@@ -56,6 +61,10 @@ public class FileHandler {
     }
 
     public static void writeHeader() throws IOException {
+
+        // simply add the to-do lists name
+        // ignore all other data
+        // used for clear inside of the task window
 
         StringBuilder output = new StringBuilder();
         File document = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
@@ -69,6 +78,9 @@ public class FileHandler {
 
     private static String readSelectedFile() throws FileNotFoundException {
 
+        // reads the data provided inside of the selected.txt
+        // returns all data as a string
+
         StringBuilder output = new StringBuilder();
         File document = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
         Scanner scanner = new Scanner(document);
@@ -81,6 +93,10 @@ public class FileHandler {
     }
 
     public static String removeExtraNewLines() throws FileNotFoundException {
+
+        // removes double new lines to prevent errors
+        // if the file contains two back to back new lines, replace it with a single new line
+
         String file = readSelectedFile();
 
         while(file.contains("\n\n")){
@@ -91,6 +107,9 @@ public class FileHandler {
     }
 
     private static void fileSelectedGenerator(String fileString) throws IOException {
+
+        // takes the name of the file originally selected (list_#.txt)
+        // copys all the data within that file into selected.txt
 
         String output = System.getProperty("user.dir") + "\\.temp\\selected.txt";
 
@@ -103,6 +122,9 @@ public class FileHandler {
     }
 
     private static String removeTaskFileData(String fileContent, TaskToDoObj item) {
+
+        // look for the task name you want to delete from within the file content string
+        // remove all data connected to it by replacing the data with a blank
 
         if (fileContent.contains(item.getName())) {
 
