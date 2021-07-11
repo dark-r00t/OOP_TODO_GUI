@@ -173,6 +173,8 @@ public class ListToDoController {
         // create an observable list with all selected items
         // run a loop and store each list carefully into a txt file
 
+        selected = todoList.getSelectionModel().getSelectedItems();
+
         saveSelectedList();
     }
 
@@ -186,34 +188,27 @@ public class ListToDoController {
         //     System.out.println(selectedToDos);
         // }
 
-        selected = todoList.getSelectionModel().getSelectedItems();
-
         for (ListToDoObj item : selected) {
 
-            saveSingleList(item);
-        }
-    }
+            for (int i = 1; ; i++) {
 
-    public void saveSingleList(ListToDoObj item) {
+                System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
 
-        for (int i = 1; ; i++) {
+                    System.out.println(item.getIndex());
 
-            System.out.println(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-            if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
+                    File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                    File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
 
-                System.out.println(item.getIndex());
+                    try {
+                        Files.copy(oldFile.toPath(), newFile.toPath());
+                        System.out.println("File copied.");
+                    } catch (Exception e) {
+                        System.out.println("Failed to copy files.");
+                    }
 
-                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                File oldFile = new File(UtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
-
-                try {
-                    Files.copy(oldFile.toPath(), newFile.toPath());
-                    System.out.println("File copied.");
-                } catch (Exception e) {
-                    System.out.println("Failed to copy files.");
+                    break;
                 }
-
-                break;
             }
         }
     }
@@ -252,7 +247,6 @@ public class ListToDoController {
         Scanner file = new Scanner(selectedFile);
 
         String name = file.nextLine();
-        file.nextLine();
 
         addItem(name);
         int index = allItems.size();
@@ -260,7 +254,7 @@ public class ListToDoController {
         System.out.println("index: " + index);
 
         FileWriter fw = new FileWriter(UtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
-        fw.write(name + "\n" + index + "\n");
+        fw.write(name + "\n");
         while (file.hasNextLine()) {
             String temp = file.nextLine();
             fw.write(temp + "\n");

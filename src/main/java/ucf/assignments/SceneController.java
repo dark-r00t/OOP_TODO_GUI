@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public class SceneController {
@@ -35,9 +36,12 @@ public class SceneController {
         Stage stage = new Stage();
         scene = new Scene(root);
 
+        LinkedList<TaskToDoObj> tasks = FileHandler.tasks();
+
         stage.setScene(scene);
         stage.setTitle("To-Do List Task");
         stage.show();
+
     }
 
     public static void menuHelp() throws IOException {
@@ -60,10 +64,6 @@ public class SceneController {
         stage.setTitle("To-Do List Task Helper");
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void closeCurrentScene() {
-
 
     }
 

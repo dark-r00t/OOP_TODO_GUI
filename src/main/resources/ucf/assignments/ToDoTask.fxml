@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane fx:id="mainPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="434.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.TaskToDoController">
+<SplitPane fx:id="mainPane" dividerPositions="0.5" orientation="VERTICAL" prefHeight="434.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.TaskToDoController">
     <SplitPane fx:id="splitPane" prefHeight="521.0" prefWidth="873.0" SplitPane.resizableWithParent="false">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="214.0" prefWidth="915.0" SplitPane.resizableWithParent="false">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <ListView fx:id="taskList" layoutY="35.0" maxHeight="497.0" maxWidth="775.0" minHeight="250.0" minWidth="405.0" onMouseClicked="#listClicked" prefHeight="302.0" prefWidth="775.0">
+            <ListView fx:id="taskList" layoutY="61.0" maxHeight="497.0" maxWidth="775.0" minHeight="250.0" minWidth="405.0" onMouseClicked="#listClicked" prefHeight="276.0" prefWidth="775.0">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
@@ -22,12 +27,18 @@
             <Button layoutX="783.0" layoutY="112.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#displayIncompleteTasksButton" prefHeight="35.0" prefWidth="125.0" text="Incomplete" />
             <Label contentDisplay="CENTER" layoutX="797.0" layoutY="180.0" prefHeight="17.0" prefWidth="97.0" text="Tasks Manipulator" />
             <Button focusTraversable="false" layoutX="783.0" layoutY="204.0" mnemonicParsing="false" onAction="#markAsCompleteButton" prefHeight="35.0" prefWidth="125.0" text="Mark as complete" />
-            <Button focusTraversable="false" layoutX="783.0" layoutY="244.0" mnemonicParsing="false" onAction="#deleteTaskButton" prefHeight="35.0" prefWidth="125.0" text="Delete" />
+            <Button focusTraversable="false" layoutX="783.0" layoutY="286.0" mnemonicParsing="false" onAction="#deleteTaskButton" prefHeight="35.0" prefWidth="125.0" text="Delete" />
             <Button layoutX="5.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#saveAllToDoButton" prefHeight="20.0" prefWidth="40.0" text="Save">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
             </Button>
+         <Button layoutX="719.0" layoutY="5.0" mnemonicParsing="false" onAction="#refreshButton" text="Refresh" />
+         <Label layoutX="572.0" layoutY="9.0" text="PLEASE USE UPON LOAD" />
+         <Label layoutX="10.0" layoutY="43.0" text="Title" />
+         <Label layoutX="206.0" layoutY="43.0" text="Description" />
+         <Label layoutX="701.0" layoutY="43.0" text="Due Date" />
+         <Button focusTraversable="false" layoutX="783.0" layoutY="245.0" mnemonicParsing="false" onAction="#markAsIncompleteButton" prefHeight="35.0" prefWidth="125.0" text="Mark as incomplete" />
         </AnchorPane>
     </SplitPane>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="915.0">

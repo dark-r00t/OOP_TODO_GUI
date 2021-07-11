@@ -49,10 +49,10 @@ public class TaskToDoObj {
         this.complete = complete;
     }
 
-    public TaskToDoObj(String name, String date, String description) {
+    public TaskToDoObj(String name, String date, String description, boolean complete) {
         this.name = name;
         this.date = date;
         this.description = description;
-        this.complete = false;
+        this.complete = complete;
     }
 }
