@@ -76,4 +76,30 @@ public class CastedUtilityGeneral {
         }
     }
 
+    public static boolean checkDateFormat(String date){
+        // YYYY-MM-DD
+
+        StringBuilder year = new StringBuilder();
+        StringBuilder month = new StringBuilder();
+        StringBuilder day = new StringBuilder();
+
+        if(date.length() == 10){
+
+            year.append(date.charAt(0)).append(date.charAt(1)).append(date.charAt(2)).append(date.charAt(3));
+            month.append(date.charAt(5)).append(date.charAt(6));
+            day.append(date.charAt(8)).append(date.charAt(9));
+
+            try{
+                Integer.parseInt(year.toString());
+                Integer.parseInt(month.toString());
+                Integer.parseInt(day.toString());
+                return true;
+            } catch(NumberFormatException | NullPointerException e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
 }

@@ -218,14 +218,18 @@ public class TaskToDoController {
         if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
             System.out.println("Missing information in text field.");
         } else {
-            generateNewTask(title, description, date);
+            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() < 256 + 1) {
+                generateNewTask(title, description, date, false);
+            } else {
+                System.out.println("Wrong date format!");
+            }
         }
     }
 
-    public void generateNewTask(String title, String description, String date) {
+    public void generateNewTask(String title, String description, String date, boolean complete) {
 
         try {
-            TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+            TaskToDoObj item = new TaskToDoObj(title, date, description, complete);
             tasks.add(item);
             generalDisplaySetup(item);
         } catch (Exception e) {
@@ -238,15 +242,34 @@ public class TaskToDoController {
     public void editDescription() {
         // call editDescriptionInit()
 
+        int index = -1;
 
+        selected = taskList.getSelectionModel().getSelectedItems();
+
+        for (int i = 0; i < selected.size(); i++) {
+
+            String task = selected.get(i);
+            if (task.contains(tasks.get(i).getName())) {
+                index = i;
+            }
+        }
+
+        editDescriptionInit(index);
     }
 
-    public void editDescriptionInit() {
+    public void editDescriptionInit(int index) {
         // look for listClicked in the linked list
         // take that index and change the .description of the obj w/ what's in the text field
         // update display
 
-
+        try {
+            tasks.get(index).setDescription(updateTaskTextBox.getText());
+            removeAll();
+            generateNewTask(tasks.get(index).getName(), tasks.get(index).getDescription(), tasks.get(index).getDate(), tasks.get(index).isComplete());
+            tasks.remove(index);
+        } catch (Exception e) {
+            System.out.println("Invalid item selected, cannot change the description.");
+        }
     }
 
     //TODO ADD
@@ -276,7 +299,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void saveAllToDoButton() throws IOException {
+    public void saveAllToDoButton() {
         // call save()
 
         selected = taskList.getSelectionModel().getSelectedItems();
@@ -295,15 +318,15 @@ public class TaskToDoController {
                 try {
                     StringBuilder content = new StringBuilder(FileHandler.removeExtraNewLines());
 
-                    for (int j = 0; j < tasks.size(); j++) {
-                        if(!content.toString().contains(tasks.get(j).getName()) && !content.toString().contains(tasks.get(j).getDescription())){
-                            content.append(tasks.get(j).getName()).append("\n").append(tasks.get(j).getDate()).append("\n").append(tasks.get(j).getDescription()).append("\n").append(tasks.get(j).isComplete()).append("\n");
+                    for (TaskToDoObj task : tasks) {
+                        if (!content.toString().contains(task.getName()) && !content.toString().contains(task.getDescription())) {
+                            content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
                         }
                     }
 
                     String output = content.toString();
 
-                    while(output.contains("\n\n")){
+                    while (output.contains("\n\n")) {
                         output = output.replace("\n\n", "\n");
                     }
 
@@ -347,7 +370,7 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void refreshButton() throws FileNotFoundException {
+    public void refreshButton() {
 
         tasks = FileHandler.tasks();
         removeAll();
@@ -389,6 +412,8 @@ public class TaskToDoController {
         items.append((task.getDate()));
 
         taskList.getItems().add(items.toString());
+
+        System.out.println(items);
     }
 
     public String getTypedTitle() {
