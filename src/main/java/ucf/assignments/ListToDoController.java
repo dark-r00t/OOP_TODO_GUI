@@ -89,7 +89,7 @@ public class ListToDoController {
     }
 
     @FXML
-    public void saveList() {
+    public void saveList() throws IOException {
         // create an observable list with all selected items
         // run a loop and store each list carefully into a txt file
 
@@ -195,7 +195,7 @@ public class ListToDoController {
         }
     }
 
-    public void saveSelectedList(ListToDoObj item) {
+    public void saveSelectedList(ListToDoObj item) throws IOException {
         // takes selected item
         // looks for a valid location to store the list
         //  - save_available#.txt
@@ -204,9 +204,10 @@ public class ListToDoController {
 
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-                System.out.println(item.getIndex());
 
-                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+                String path = System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt";
+
+                File newFile = new File(path);
                 File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + item.getIndex() + ".txt");
 
                 try {
@@ -215,7 +216,9 @@ public class ListToDoController {
                     System.out.println("Failed to copy files.");
                 }
 
-                SceneController.savePopUp("save_" + item.getIndex() + ".txt");
+                FileHandler.removeExtraNewLine(newFile, path);
+
+                SceneController.savePopUp("save_" + i + ".txt");
 
                 break;
             }
@@ -226,6 +229,10 @@ public class ListToDoController {
         // sets up initial file direc
         // takes in multiple files if need be
         // for every file selected format file using formatFile()
+        // - set an index var to the size of allItems linked list + 1
+        // save result of formatfile using the index and selected file to a string
+        // add a new item using formatfile result
+        // update the new items index
 
         String path = System.getProperty("user.dir");
         FileChooser fc = new FileChooser();
@@ -235,12 +242,15 @@ public class ListToDoController {
 
         List<File> selectedFile = fc.showOpenMultipleDialog(null);
         for (File file : selectedFile) {
-            formatFile(file);
+            int index = allItems.size() + 1;
+            String file_name = formatFile(file, index);
+            addItem(file_name);
+            allItems.get(index - 1).setIndex(index);
         }
 
     }
 
-    public void formatFile(File selectedFile) throws IOException {
+    public static String formatFile(File selectedFile, int index) throws IOException {
         // takes a file
         // reads the first line in file (name of the to-do list)
         // - stores into an available list_#.txt
@@ -251,20 +261,16 @@ public class ListToDoController {
         Scanner file = new Scanner(selectedFile);
         String name = file.nextLine();
 
-        addItem(name);
-        int index = allItems.size();
-
         FileWriter fw = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
         fw.write(name + "\n");
 
         while (file.hasNextLine()) {
-            String temp = file.nextLine();
-            fw.write(temp + "\n");
+            fw.write(file.nextLine() + "\n");
         }
 
         fw.close();
 
-        allItems.get(index - 1).setIndex(index);
+        return name;
     }
 
     public void storeData(ListToDoObj item) throws IOException {
@@ -333,13 +339,11 @@ public class ListToDoController {
 
             try {
                 if (newFile.renameTo(oldFile)) {
-                    continue;
+                    System.out.println("");
                 }
             } catch (Exception e) {
                 System.out.println("Failed to update index.");
             }
-
-            System.out.println(i);
         }
     }
 

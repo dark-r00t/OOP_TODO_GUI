@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,11 +52,11 @@ class ToDoTest {
         String description = "desc";
         String date = "2021-11-11";
 
-        TaskToDoObj item = new TaskToDoObj(title, date, description,false);
+        TaskToDoObj item = new TaskToDoObj(title, date, description, false);
 
         boolean result = TaskToDoController.editDescription(item, new_description);
 
-        if(item.getDescription().equalsIgnoreCase(description)){
+        if (item.getDescription().equalsIgnoreCase(description)) {
             assertFalse(result);
         } else {
             fail();
@@ -284,7 +285,7 @@ class ToDoTest {
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
-        if(actual.length() >= 189){
+        if (actual.length() >= 189) {
             assertEquals(actual, expected);
         } else {
             fail();
@@ -310,7 +311,7 @@ class ToDoTest {
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
-        if(item.isComplete()){
+        if (item.isComplete()) {
             assertEquals(actual, expected);
         } else {
             fail();
@@ -336,7 +337,7 @@ class ToDoTest {
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
-        if(actual.length() >= 189){
+        if (actual.length() >= 189) {
             assertEquals(actual, expected);
         } else {
             fail();
@@ -373,7 +374,7 @@ class ToDoTest {
             }
         }
 
-        String output = TaskToDoController.save(tasks);
+        String output = FileHandler.saveTaskData(tasks);
 
         fw.write(output);
         fw.close();
@@ -382,11 +383,33 @@ class ToDoTest {
     }
 
     @Test
-    void load_list() {
+    void load_list() throws IOException {
+        // REQUIRES THE PROVIDED ToDo_Files/list_1.txt FILE
+        // create an index to where you would like to store .temp/list_1.txt
+        // create a string with the test files location
+        // scan the test files first line and store it into an expected string
+        // create a formatted, program readable, file using formatFile (test file, index to store)
+        // store result into a string
+        // check to see if the return value is equal to the expected result
 
+        int index = 1;
+        String test_file_path = System.getProperty("user.dir") + "\\ToDo_Files\\list_1.txt";
+
+        File document = new File(test_file_path);
+        Scanner scanner = new Scanner(document);
+
+        String expected_name = scanner.nextLine();
+        scanner.close();
+
+        File test_file = new File(test_file_path);
+        String file_name = ListToDoController.formatFile(test_file, index);
+
+        if (!file_name.equalsIgnoreCase(expected_name)) {
+            fail();
+        } else {
+            assertTrue(true);
+        }
 
     }
 
 }
-
-//TODO UPDATE PUML

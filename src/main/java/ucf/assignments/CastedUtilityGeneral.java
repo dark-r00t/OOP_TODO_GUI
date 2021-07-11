@@ -26,8 +26,7 @@ public class CastedUtilityGeneral {
         // Check to see if there is a file called .temp
         // if there is not create one
 
-        String path = tempDirec();
-        File ToDoFolder = new File(path);
+        File ToDoFolder = new File(tempDirec());
 
         if (ToDoFolder.mkdir()) {
             System.out.println("Created .temp folder.");
@@ -41,11 +40,9 @@ public class CastedUtilityGeneral {
         // prints the deleted files in the console
         // then removes the other temp file not labled as list_#
 
-        String path = CastedUtilityGeneral.tempDirec();
-
         for (int i = 1; i < 101; i++) {
 
-            String newPath = path + "\\list_" + i + ".txt";
+            String newPath = tempDirec() + "\\list_" + i + ".txt";
 
             File index = new File(newPath);
 
@@ -101,8 +98,6 @@ public class CastedUtilityGeneral {
         StringBuilder year = new StringBuilder();
         StringBuilder month = new StringBuilder();
         StringBuilder day = new StringBuilder();
-
-        System.out.println(date);
 
         if(date.length() == 10){
 

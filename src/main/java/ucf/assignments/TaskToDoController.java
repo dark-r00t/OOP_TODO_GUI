@@ -216,7 +216,7 @@ public class TaskToDoController {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
                 File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
                 FileWriter fw = new FileWriter(newFile);
-                String output = save(tasks);
+                String output = FileHandler.saveTaskData(tasks);
 
                 fw.write(output);
                 fw.close();
@@ -445,41 +445,6 @@ public class TaskToDoController {
         }
 
         return false;
-    }
-
-    public static String save(LinkedList<TaskToDoObj> list) {
-        // takes in a list of items
-        // try to compile all the contents with in the list of items linked list into a single string
-        // replace back to back newlines with a single newline for as long as there is a back to back new line
-        // remove additional new line from the file
-        // return compounded string
-
-        try {
-            StringBuilder content = new StringBuilder();
-            String selected_path = CastedUtilityGeneral.tempDirec() + "\\selected.txt";
-            BufferedReader br = new BufferedReader(new FileReader(selected_path));
-            String list_title = br.readLine();
-
-            content.append(list_title).append("\n");
-
-            for (TaskToDoObj list_item : list) {
-                content.append(list_item.getName()).append("\n").append(list_item.getDate()).append("\n").append(list_item.getDescription()).append("\n").append(list_item.isComplete()).append("\n");
-            }
-
-            String output = content.toString();
-
-            while (output.contains("\n\n")) {
-                output = output.replace("\n\n", "\n");
-            }
-
-            output = output.substring(0, output.length() - 1);
-
-            return output;
-        } catch (IOException e) {
-            System.out.println("Failed to add additional tasks to the save file.");
-        }
-
-        return "";
     }
 
     public static void clearList(LinkedList<TaskToDoObj> list) {
