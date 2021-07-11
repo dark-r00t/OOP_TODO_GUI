@@ -45,8 +45,8 @@ public class ListToDoController {
         // write the list name into it's own file (list_#.txt)
 
         ListToDoObj item = new ListToDoObj(name);
-        todoList.getItems().add(item);
 
+        todoList.getItems().add(item);
         allItems.add(item);
 
         storeData(item);
@@ -92,7 +92,6 @@ public class ListToDoController {
         // removes the specific file from the .temp direc
 
         String path = CastedUtilityGeneral.tempDirec();
-
         String newPath = path + "\\list_" + txt + ".txt";
 
         File index = new File(newPath);
@@ -110,7 +109,6 @@ public class ListToDoController {
         selected = todoList.getSelectionModel().getSelectedItems();
 
         for (ListToDoObj item : selected) {
-
             editName(item);
         }
     }
@@ -123,7 +121,9 @@ public class ListToDoController {
         temp = item;
 
         storeData(temp);
+
         temp.setName(titleToDoTextBox.getText());
+
         todoList.getItems().add(temp);
         todoList.getItems().remove(item);
     }
@@ -146,7 +146,6 @@ public class ListToDoController {
         selected = todoList.getSelectionModel().getSelectedItems();
 
         for (ListToDoObj i : selected) {
-
             selectToDo(i);
             SceneController.switchToTask();
 
@@ -179,7 +178,6 @@ public class ListToDoController {
         selected = todoList.getSelectionModel().getSelectedItems();
 
         for (ListToDoObj item : selected) {
-
             saveSelectedList(item);
         }
     }
@@ -193,7 +191,6 @@ public class ListToDoController {
 
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-
                 System.out.println(item.getIndex());
 
                 File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
@@ -225,10 +222,9 @@ public class ListToDoController {
         // for every file selected format file using formatFile()
 
         String path = System.getProperty("user.dir");
-
         FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File(path + "\\ToDo_Files"));
 
+        fc.setInitialDirectory(new File(path + "\\ToDo_Files"));
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File: ", "*.txt"));
 
         List<File> selectedFile = fc.showOpenMultipleDialog(null);
@@ -247,7 +243,6 @@ public class ListToDoController {
         // writes every line afterwards into the file
 
         Scanner file = new Scanner(selectedFile);
-
         String name = file.nextLine();
 
         addItem(name);
@@ -255,14 +250,15 @@ public class ListToDoController {
 
         FileWriter fw = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
         fw.write(name + "\n");
+
         while (file.hasNextLine()) {
             String temp = file.nextLine();
             fw.write(temp + "\n");
         }
+
         fw.close();
 
         allItems.get(index - 1).setIndex(index);
-
     }
 
     public void storeData(ListToDoObj item) throws IOException {
@@ -276,21 +272,20 @@ public class ListToDoController {
 
         CastedUtilityGeneral.createTempFolder();
 
+        int index;
+
         if (item.getIndex() == -1) {
 
-            int index = CastedUtilityGeneral.indexer();
+            index = CastedUtilityGeneral.indexer();
 
             FileWriter todoWrite = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
 
             todoWrite.write(item + "\n");
-
             todoWrite.close();
-
-            item.setIndex(index);
 
         } else {
 
-            int index = item.getIndex();
+            index = item.getIndex();
             StringBuilder data = new StringBuilder();
 
             File editedDataFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
@@ -299,9 +294,11 @@ public class ListToDoController {
             reader.readLine();
 
             String newName = titleToDoTextBox.getText();
+
             data.append(newName).append("\n");
 
             String line = reader.readLine();
+
             while (line != null) {
                 data.append(line).append("\n");
                 line = reader.readLine();
@@ -312,10 +309,8 @@ public class ListToDoController {
 
             reader.close();
             writer.close();
-
-            item.setIndex(index);
-
         }
+        item.setIndex(index);
     }
 
     public void updateIndex(int index) {

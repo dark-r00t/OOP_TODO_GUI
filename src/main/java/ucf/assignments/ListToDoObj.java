@@ -5,10 +5,7 @@
 
 package ucf.assignments;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 public class ListToDoObj {
     // create a private string for name
@@ -16,8 +13,6 @@ public class ListToDoObj {
     // create a private integer for list total amount
     // getters and setters
     // create a constructor
-    // addItem function
-    // remove item function
 
     private String name;
     private static LinkedList<TaskToDoObj> list;

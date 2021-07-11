@@ -22,9 +22,12 @@ public class SceneController {
     private static Scene scene;
 
     public static void switchToMenu() throws IOException {
+        // gets the ToDoMenu.fxml
+        // displays the scene
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoMenu.fxml")));
         Stage stage = new Stage();
+
         scene = new Scene(root);
 
         stage.setScene(scene);
@@ -33,12 +36,13 @@ public class SceneController {
     }
 
     public static void switchToTask() throws IOException {
+        // gets the ToDoTask.fxml
+        // displays the scene
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoTask.fxml")));
         Stage stage = new Stage();
-        scene = new Scene(root);
 
-        LinkedList<TaskToDoObj> tasks = FileHandler.tasks();
+        scene = new Scene(root);
 
         stage.setScene(scene);
         stage.setTitle("To-Do List Task");
@@ -47,30 +51,40 @@ public class SceneController {
     }
 
     public static void menuHelp() throws IOException {
+        // gets the ToDoMenuHelp.fxml
+        // displays the scene
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoMenuHelp.fxml")));
         Stage stage = new Stage();
+
         scene = new Scene(root);
 
-        stage.setScene(scene);
         // ALL PRAISE REY
-        stage.setTitle("To-Do List Menu Helper :        I <3 REY");
+        stage.setTitle("To-Do List Menu Helper");
+        stage.setScene(scene);
         stage.show();
     }
 
     public static void taskHelp() throws IOException {
+        // gets the ToDoTaskHelp.fxml
+        // displays the scene
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoTaskHelp.fxml")));
         Stage stage = new Stage();
+
         scene = new Scene(root);
 
-        stage.setTitle("To-Do List Task Helper :        I <3 REY");
+        // ALL PRAISE REY
+        stage.setTitle("To-Do List Task Helper");
         stage.setScene(scene);
         stage.show();
 
     }
 
     public static void savePopUp(String name) {
+        // create a new mini scene
+        // display file saved name and file path
+        // display scene
 
         System.out.println("Save Notification Opened");
 

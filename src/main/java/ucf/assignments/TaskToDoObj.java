@@ -10,7 +10,7 @@ public class TaskToDoObj {
     // - name
     // - date
     // - description
-    // boolean for completed
+    // - boolean for completed
 
     private String name;
     private String date;

@@ -8,17 +8,16 @@ package ucf.assignments;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 
 public class CastedUtilityGeneral {
 
     public static void addToDoSaveFolder() {
-        // Check to see if there is a file called ToDo-Files
+        // Check to see if there is a file called To-Do Files
         // if there is not create one
 
         String path = System.getProperty("user.dir") + "\\ToDo_Files";
-
         File ToDoFolder = new File(path);
+
         if (ToDoFolder.mkdir()) {
             System.out.println("Created ToDo_Files folder.");
         }
@@ -29,8 +28,8 @@ public class CastedUtilityGeneral {
         // if there is not create one
 
         String path = tempDirec();
-
         File ToDoFolder = new File(path);
+
         if (ToDoFolder.mkdir()) {
             System.out.println("Created .temp folder.");
         }
@@ -45,6 +44,7 @@ public class CastedUtilityGeneral {
 
         for (i = 1; i < 100 + 1; i++) {
             File test = new File(path + "\\list_" + i + ".txt");
+
             if (!test.exists()) {
                 break;
             }
@@ -81,6 +81,7 @@ public class CastedUtilityGeneral {
         }
 
         File previousSelected = new File(tempDirec() + "\\selected.txt");
+
         try {
             if (previousSelected.delete()) {
                 System.out.println("Removed selected.txt");
