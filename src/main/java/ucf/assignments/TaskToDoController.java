@@ -36,21 +36,18 @@ public class TaskToDoController {
 
     @FXML
     public void displayAllTasksButton() {
-        // remove current display
-        // call displayAll()
+        // call refreshDisplay()
 
-        removeAll();
-
-        for (TaskToDoObj task : tasks) {
-            String data = displayAll(task);
-            taskList.getItems().add(data);
-        }
+        refreshDisplay();
     }
 
     @FXML
     public void displayCompletedTasksButton() {
         // remove current display
-        // call displayCompleted() for every completed task
+        // run loop for every available task
+        // check to see if the items complete status is true
+        // save result of displayCompleted() using a selected task
+        // add result to the display
 
         removeAll();
 
@@ -65,7 +62,10 @@ public class TaskToDoController {
     @FXML
     public void displayIncompleteTasksButton() {
         // remove current display
-        // call displayIncomplete() for every uncompleted task
+        // run loop for every available task
+        // check to see if the items complete status is false
+        // save result of displayIncomplete() using a selected task
+        // add result to the display
 
         removeAll();
 
@@ -114,10 +114,22 @@ public class TaskToDoController {
     }
 
     @FXML
+    public void addNewTaskButton() {
+        // gather all the user provided inputs
+        // call addNewTask() with data provided
+
+        String title = getTypedTitle();
+        String description = getTypedDescription();
+        String date = getTypedDate();
+
+        addNewTask(title, description, date);
+    }
+
+    @FXML
     public void deleteTaskButton() {
         // update selected to every selected item
         // for there is a string selected
-        // call deleteTask() with the selected string
+        // call deleteTaskStart() with the selected string
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
@@ -131,25 +143,13 @@ public class TaskToDoController {
     }
 
     @FXML
-    public void addNewTaskButton() {
-        // gather all the user provided inputs
-        // call addNewTask() with data provided
-
-        String title = getTypedTitle();
-        String description = getTypedDescription();
-        String date = getTypedDate();
-
-        addNewTask(title, description, date);
-    }
-
-    @FXML
     public void editDescription() {
         // takes all selected items
         // for every selected task
         // for every task available in the tasks linked list
         // if the task selected matches any task in the list w/ the same name and description
         // edit the description of object
-        // refresh display w/ removeAll() displayALL()
+        // refresh display
 
         selected = taskList.getSelectionModel().getSelectedItems();
         String newDescription = updateTaskTextBox.getText();
@@ -161,11 +161,8 @@ public class TaskToDoController {
                         if (!newDescription.equalsIgnoreCase("")) {
                             editDescription(taskToInspect, newDescription);
                         }
-                        removeAll();
-                        for (TaskToDoObj task : tasks) {
-                            String data = displayAll(task);
-                            taskList.getItems().add(data);
-                        }
+
+                        refreshDisplay();
                     } catch (Exception e) {
                         System.out.println("Failed to edit description.");
                     }
@@ -183,7 +180,7 @@ public class TaskToDoController {
         // for every task available in the tasks linked list
         // if the task selected matches any task in the list w/ the same name and description
         // edit the date of object
-        // refresh display w/ removeAll() displayALL()
+        // refresh display
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
@@ -196,11 +193,8 @@ public class TaskToDoController {
                         if (!newDate.equalsIgnoreCase("")) {
                             editDate(taskToInspect, newDate);
                         }
-                        removeAll();
-                        for (TaskToDoObj task : tasks) {
-                            String data = displayAll(task);
-                            taskList.getItems().add(data);
-                        }
+
+                        refreshDisplay();
                     } catch (Exception e) {
                         System.out.println("Failed to edit description.");
                     }
@@ -214,11 +208,9 @@ public class TaskToDoController {
     @FXML
     public void saveAllToDoButton() throws IOException {
         // finds the correct index to store the file
-        // calls save() with found index
+        // saves result of save() using tasks list
         // opens save popup to display name of saved file and the path
         // break to stop loop (index to save was already found at this point)
-
-        selected = taskList.getSelectionModel().getSelectedItems();
 
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
@@ -253,22 +245,18 @@ public class TaskToDoController {
 
     @FXML
     public void refreshButton() {
-        // takes data inside of selected.txt and transforms it into a linked list
+        // save the result of tasks() into a linked list
+        // refresh display
 
         tasks = FileHandler.tasks();
 
-        removeAll();
-        for (TaskToDoObj task : tasks) {
-            String data = displayAll(task);
-            taskList.getItems().add(data);
-        }
+        refreshDisplay();
     }
 
     @FXML
     public void clearAll() throws IOException {
-        // calls writeHeader() to retain list name
+        // calls writeHeader() to retain list title
         // removes all items from linked list
-        // ignores all other data
         // updates screen
 
         FileHandler.writeHeader();
@@ -276,24 +264,6 @@ public class TaskToDoController {
         clearList(tasks);
 
         removeAll();
-    }
-
-    public static void clearList(LinkedList<TaskToDoObj> list) {
-        while (!list.isEmpty()) {
-            list.remove();
-        }
-    }
-
-    public static String displayAll(TaskToDoObj task) {
-        // for every available task call generalDisplaySetup()
-
-        try {
-            return generalDisplaySetup(task);
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
-        }
-
-        return "";
     }
 
     public void removeAll() {
@@ -309,10 +279,33 @@ public class TaskToDoController {
         }
     }
 
-    public static String displayCompleted(TaskToDoObj task, boolean status) {
-        // attempt to display task input
+    public void displayAll() {
+        // while there is a task to display
+        // display it
 
-        if(status){
+        for (TaskToDoObj task : tasks) {
+            String data = displayTask(task);
+            taskList.getItems().add(data);
+        }
+    }
+
+    public static String displayTask(TaskToDoObj task) {
+        // return the result of generalDisplaySetup using the provided task
+
+        try {
+            return generalDisplaySetup(task);
+        } catch (Exception e) {
+            System.out.println("Failed to display all items.");
+        }
+
+        return "";
+    }
+
+    public static String displayCompleted(TaskToDoObj task, boolean status) {
+        // if the item given has a status of true
+        // return the result of generalDisplaySetup using the task provided
+
+        if (status) {
             try {
                 return generalDisplaySetup(task);
             } catch (Exception e) {
@@ -324,9 +317,10 @@ public class TaskToDoController {
     }
 
     public static String displayIncomplete(TaskToDoObj task, boolean status) {
-        // attempt to display task input
+        // if the item given has a status of false
+        // return the result of generalDisplaySetup using the task provided
 
-        if(!status){
+        if (!status) {
             try {
                 return generalDisplaySetup(task);
             } catch (Exception e) {
@@ -339,16 +333,53 @@ public class TaskToDoController {
 
     public static void markAsComplete(TaskToDoObj item) {
         // take a TaskToDo object
-        // check its complete status to true
+        // make its complete status to true
 
         item.setComplete(true);
     }
 
     public static void markAsIncomplete(TaskToDoObj item) {
         // take a TaskToDo object
-        // check its complete status to false
+        // make its complete status to false
 
         item.setComplete(false);
+    }
+
+    public void addNewTask(String title, String description, String date) {
+        // if any text field is missing data stop and wait for correct data
+        // else if all the data provided has something available
+        // - check to make sure if the provided date is in the right format and the description is <= 256
+        // - - if it is call generateNewTask
+        // - - - save result to a string
+        // - - - display result
+        // - - otherwise ask for new date input
+
+        if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
+            System.out.println("Missing information in text field.");
+        } else {
+            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
+                String item = generateNewTask(tasks, title, description, date);
+                taskList.getItems().add(item);
+            } else {
+                System.out.println("Please, re-enter the data.");
+            }
+        }
+    }
+
+    public static String generateNewTask(LinkedList<TaskToDoObj> list, String title, String description, String date) {
+        // takes in a list of items
+        // try to make a new object using the other provided data
+        // add the new item to the list
+        // return the result of generalDisplaySetup using the new item
+
+        try {
+            TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+            list.add(item);
+            return generalDisplaySetup(item);
+        } catch (Exception e) {
+            System.out.println("Error displaying new item.");
+        }
+        return "";
     }
 
     public void deleteTaskStart(String taskToDelete) {
@@ -373,49 +404,15 @@ public class TaskToDoController {
     }
 
     public static void deleteTask(LinkedList<TaskToDoObj> list, int i) {
-        // removes a specific task
+        // removes a specific task from a provided list of items
 
         list.remove(i);
     }
 
-    public void addNewTask(String title, String description, String date) {
-        // if any text field is missing data stop and wait for correct data
-        // else if all the data provided has something available
-        // - check to make sure if the provided date is in the right format and the description is <= 256
-        // - - if it is call generateNewTask
-        // - - otherwise ask for new date input
-
-        if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
-            System.out.println("Missing information in text field.");
-        } else {
-            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
-                String item = generateNewTask(tasks, title, description, date);
-                taskList.getItems().add(item);
-            } else {
-                System.out.println("Please, re-enter the data.");
-            }
-        }
-    }
-
-    public static String generateNewTask(LinkedList<TaskToDoObj> list, String title, String description, String date) {
-        // take all necessary data
-        // try to create a new TaskToDoObj with data
-        // display the new item using generalDisplaySetup()
-
-        try {
-            TaskToDoObj item = new TaskToDoObj(title, date, description, false);
-            list.add(item);
-            return generalDisplaySetup(item);
-        } catch (Exception e) {
-            System.out.println("Error displaying new item.");
-        }
-        return "";
-    }
-
     public static boolean editDescription(TaskToDoObj item, String newDescription) {
-        // take in an item
-        // change the description with what's in the text field
-        // - only if the provided description is <= 256
+        // take in an item and a new description name
+        // if the provided description is <= 256
+        // change description and return true
 
         try {
             if (newDescription.length() <= 256) {
@@ -432,9 +429,9 @@ public class TaskToDoController {
     }
 
     public static boolean editDate(TaskToDoObj item, String newDate) {
-        // take in an item
-        // change the date with what's in the text field
-        // - only if the provided date is in the correct format
+        // take in an item and a new date
+        // if the provided date fits the required format
+        // change date and return true
 
         try {
             if (CastedUtilityGeneral.checkDateFormat(newDate)) {
@@ -451,11 +448,11 @@ public class TaskToDoController {
     }
 
     public static String save(LinkedList<TaskToDoObj> list) {
-        // create a file with provided index at ToDO_Files/save_found-index#.txt
-        // try to compile all the contents with in the tasks linked list into a single string
+        // takes in a list of items
+        // try to compile all the contents with in the list of items linked list into a single string
         // replace back to back newlines with a single newline for as long as there is a back to back new line
         // remove additional new line from the file
-        // write compounded string into the save file
+        // return compounded string
 
         try {
             StringBuilder content = new StringBuilder();
@@ -485,7 +482,17 @@ public class TaskToDoController {
         return "";
     }
 
-    //TODO FIX ALIGNMENT ISSUES
+    public static void clearList(LinkedList<TaskToDoObj> list) {
+        // takes in a linked list of items
+        // while the list is not empty
+        // remove an item
+
+        while (!list.isEmpty()) {
+            list.remove();
+        }
+    }
+
+    // TODO FIX ALIGNMENT ISSUES (Note: console display is fine, listview display is off for some reason???)
     public static String generalDisplaySetup(TaskToDoObj task) {
         // add name description and date with appropriate spacing and adds the string into the view
 
@@ -522,6 +529,14 @@ public class TaskToDoController {
         // get data from description task text box and returns the string
 
         return descriptionTaskTextBox.getText();
+    }
+
+    public void refreshDisplay(){
+        // removes everything from display
+        // displays everything
+
+        removeAll();
+        displayAll();
     }
 
 }

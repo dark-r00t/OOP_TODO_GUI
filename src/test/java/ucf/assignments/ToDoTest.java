@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +18,9 @@ class ToDoTest {
 
     @Test
     void over_hundred_items() {
+        // populate a linked list with items
+        // use the generateNewTask() method to do so
+        // check to see if the list size is > 100
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
@@ -39,20 +41,31 @@ class ToDoTest {
 
     @Test
     void description_length_less_than_256() {
+        // create a string w/ a length greater than 256
+        // try to create the description using editDescription
+        // if it returns false, the description will not be changed
+
+        String new_description = "this_description_has_a_length_of_257_IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII";
 
         String title = "title";
-        String description = "this_description_has_a_length_of_257_IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII";
+        String description = "desc";
         String date = "2021-11-11";
 
-        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+        TaskToDoObj item = new TaskToDoObj(title, date, description,false);
 
-        boolean result = TaskToDoController.editDescription(item, description);
+        boolean result = TaskToDoController.editDescription(item, new_description);
 
-        assertFalse(result);
+        if(item.getDescription().equalsIgnoreCase(description)){
+            assertFalse(result);
+        } else {
+            fail();
+        }
     }
 
     @Test
     void due_date_format_1() {
+        // make year before the current system year
+        // check year
 
         String date = "1999-01-01";
 
@@ -61,6 +74,8 @@ class ToDoTest {
 
     @Test
     void due_date_format_2() {
+        // make a year in the current year or higher and is in the correct format
+        // check year
 
         String date = "2021-01-01";
 
@@ -69,6 +84,8 @@ class ToDoTest {
 
     @Test
     void due_date_display() {
+        // only the correct format will have an effect
+        // due to the boolean nature of the method
 
         String display;
 
@@ -85,6 +102,9 @@ class ToDoTest {
 
     @Test
     void add_new_item() {
+        // create necessary strings to make a task object
+        // create a new task object using generateNewTask()
+        // check to see if the data was processed correctly
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
@@ -103,6 +123,11 @@ class ToDoTest {
 
     @Test
     void remove_item() {
+        // create necessary strings to make a task object
+        // create a new task object using generateNewTask()
+        // check to see if the data was processed correctly by checking the size
+        // call deleteTask()
+        // check to see if the size drops
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
@@ -128,6 +153,10 @@ class ToDoTest {
 
     @Test
     void clear() {
+        // fill a linked list with random data
+        // check to see if there are items in the linked list, if not fail the test
+        // call clearList()
+        // check to see if the linked list is empty
 
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
@@ -154,6 +183,9 @@ class ToDoTest {
 
     @Test
     void change_description() {
+        // create an item with all necessary data
+        // try to change the description
+        // check to see if the description was changed
 
         String title = "title";
         String description = "yes";
@@ -172,6 +204,10 @@ class ToDoTest {
 
     @Test
     void change_date() {
+        // create an item with all necessary data
+        // call editDate() with a valid date
+        // check boolean result, if false fail
+        // assert that the items date was changed to the date provided
 
         String title = "title";
         String description = "desc";
@@ -190,6 +226,10 @@ class ToDoTest {
 
     @Test
     void mark_complete() {
+        // create an item with all necessary data
+        // the item has a complete status of false
+        // try to change the complete status by using markAsComplete()
+        // check to see if the items complete status is now true
 
         String title = "title";
         String description = "desc";
@@ -204,6 +244,12 @@ class ToDoTest {
 
     @Test
     void mark_incomplete() {
+        // create an item with all necessary data
+        // the item has a complete status of false
+        // set the items complete status to true
+        // check to see if the items complete status is true, if not fail
+        // try to change the status using markAsIncomplete()
+        // check to see if the result is false
 
         String title = "title";
         String description = "desc";
@@ -224,6 +270,9 @@ class ToDoTest {
 
     @Test
     void all_items_display() {
+        // create an item with all necessary data
+        // save the result of displayAll() w/ the created item
+        // check to see if the string is equivalent to what was expected
 
         String title = "title";
         String description = "desc";
@@ -231,7 +280,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, date, description, false);
 
-        String actual = TaskToDoController.displayAll(item);
+        String actual = TaskToDoController.displayTask(item);
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
@@ -244,6 +293,10 @@ class ToDoTest {
 
     @Test
     void complete_items_display() {
+        // create an item with all necessary data
+        // set items complete status to true
+        // save the result of displayCompleted
+        // check to see if the actual result matches the expected result
 
         String title = "title";
         String description = "desc";
@@ -266,7 +319,10 @@ class ToDoTest {
 
     @Test
     void incomplete_items_display() {
-
+        // create an item with all necessary data
+        // set items complete status to false
+        // save the result of displayCompleted
+        // check to see if the actual result matches the expected result
 
         String title = "title";
         String description = "desc";
@@ -289,6 +345,13 @@ class ToDoTest {
 
     @Test
     void save() throws IOException {
+        // create all necessary folders
+        // create a new save file at index 999 -> ToDo_Files/save_999.txt
+        // fill a linked list with items
+        // call save() w/ the list of items
+        // write the result of save() to the save file
+        // check to see if the file exists
+
         CastedUtilityGeneral.addToDoSaveFolder();
         CastedUtilityGeneral.createTempFolder();
 
