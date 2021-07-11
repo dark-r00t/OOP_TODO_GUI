@@ -5,141 +5,222 @@
 
 package ucf.assignments;
 
+import javafx.scene.control.ListView;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ToDoTest {
 
     @Test
-    void addItem_ToDoList_Test(){
-        // create a LinkedList to test correct response
-        // create a LinkedList to throw in test items
-        // - name
-        // - a ToDoItem
-        // - amount of items in list
-        // call the addItem function w/ temp variables as strings
-        // assert that the linked lists are the same
+    void over_hundred_items() {
+
+        LinkedList<TaskToDoObj> tasks = new LinkedList<>();
+
+        for (int i = 0; i < 125; i++) {
+            String title = "title_" + i;
+            String description = "description";
+            String date = "2021-11-11";
+
+            try {
+                TaskToDoController.generateNewTask(tasks, title, description, date);
+            } catch (Exception e) {
+                System.out.println("Failed.");
+            }
+        }
+
+        assertTrue(tasks.size() > 100);
+    }
+
+    @Test
+    void description_length_less_than_256() {
+
+        String title = "title";
+        String description = "this_description_has_a_length_of_257_IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII";
+        String date = "2021-11-11";
+
+        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+
+        boolean result = TaskToDoController.editDescription(item, description);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void due_date_format_1() {
+
+        String date = "1999-01-01";
+
+        assertFalse(CastedUtilityGeneral.checkDateFormat(date));
+    }
+
+    @Test
+    void due_date_format_2() {
+
+        String date = "2021-01-01";
+
+        assertTrue(CastedUtilityGeneral.checkDateFormat(date));
+    }
+
+    @Test
+    void due_date_display() {
+
+        String display = "testing";
+
+        String date = "2021-01-01";
+
+        if (CastedUtilityGeneral.checkDateFormat(date)) {
+            display = date;
+        } else {
+            display = "failed";
+        }
+
+        assertEquals(display, date);
+    }
+
+    @Test
+    void add_new_item() {
+
+        LinkedList<TaskToDoObj> tasks = new LinkedList<>();
+
+        String title = "title";
+        String description = "description";
+        String date = "2021-11-11";
+
+        try {
+            TaskToDoController.generateNewTask(tasks, title, description, date);
+        } catch (Exception e) {
+            System.out.println("Failed.");
+        }
+
+        assertEquals(tasks.get(0).getName(), "title");
+    }
+
+    @Test
+    void remove_item() {
+
+        LinkedList<TaskToDoObj> tasks = new LinkedList<>();
+
+        String title = "title";
+        String description = "description";
+        String date = "2021-11-11";
+
+        try {
+            TaskToDoController.generateNewTask(tasks, title, description, date);
+            TaskToDoController.generateNewTask(tasks, title, description, date);
+        } catch (Exception e) {
+            System.out.println("Failed.");
+        }
+
+        if (tasks.size() == 2) {
+            TaskToDoController.deleteTask(tasks, 1);
+        } else {
+            fail();
+        }
+
+        assertEquals(tasks.size(), 1);
+    }
+
+    @Test
+    void clear() {
+
+        LinkedList<TaskToDoObj> tasks = new LinkedList<>();
+
+        for (int i = 0; i < 125; i++) {
+            String title = "title_" + i;
+            String description = "description";
+            String date = "2021-11-11";
+
+            try {
+                TaskToDoController.generateNewTask(tasks, title, description, date);
+            } catch (Exception e) {
+                System.out.println("Failed.");
+            }
+        }
+
+        if (tasks.isEmpty()) {
+            fail();
+        }
+
+        TaskToDoController.clearList(tasks);
+
+        assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    void change_description() {
+
+        String title = "title";
+        String description = "yes";
+        String date = "2021-11-11";
+
+        TaskToDoObj item = new TaskToDoObj(title, description, date, false);
+
+        boolean change = TaskToDoController.editDescription(item, "no");
+
+        if (change) {
+            assertEquals("no", item.getDescription());
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    void change_date(){
 
 
     }
 
-    void removeItem_ToDoList_Test(){
-        // create a LinkedList to test correct response
-        // create an empty LinkedList to check if items were removed
-        // call the addItem function w/ temp variables as strings
-        // then remove the item
-        // assert that the linked lists are the same
-
-    }
-
-    void editName_ToDoList_Test(){
-        // create a LinkedList to test correct response
-        // give the linked list random information
-        // create a second LinkedList w/ the desired response
-        // call editName w/ the newName and the firstList
-        // assert that the two linked lists are the same
-
-    }
-
-    void markAsComplete_ToDoController_Test(){
-        // create a LinkedList to test correct response
-        // give the linked list random information
-        // -important -> mark as complete
-        // create a second LinkedList w/ the desired response
-        // call markAsComplete
-        // test (assert) that they are equivalent
+    @Test
+    void mark_complete(){
 
 
     }
 
-    void deleteTask_ToDoController_Test(){
-        // create an empty object LinkedList
-        // create an expected LinkedList w/ random data inside
-        // call deleteTask
-        // test to see if the data was successfully deleted
-            // MAKE SURE ALL DATA IS DELETED
+    @Test
+    void mark_incomplete(){
 
 
     }
 
-    void addNewTask_ToDoController_Test(){
-        // create two empty LinkedList<obj>
-        //  -fill an obj with random data
-        // call addNewTask w/ same provided data
-        // test to see if theyre equivalent
+    @Test
+    void all_items_display(){
 
 
     }
 
-    void editDescriptionInit_ToDoController_Test(){
-        // create a LinkedList<obj> w/ random data
-        // create a 2nd LinkedList<obj w/ the same data (different desc.)
-        //  call editDescriptionInit w/ desired new description and old
-        // test ot see if theyre equivalent
+    @Test
+    void complete_items_display(){
 
 
     }
 
-    void modifyDateText_ToDoController_Test(){
-        // create a LinkedList<obj> w/ random data
-        // create a 2nd LinkedList<obj w/ the same data (different date.)
-        //  call changeDateInit w/ desired new date and old
-        // test ot see if theyre equivalent
+    @Test
+    void incomplete_items_display(){
 
 
     }
 
-    void displayAll_ToDoController_test(){
-        // create a LinkedList<obj> w/ full objects
-        // create an expected result string
-        // call displayAll()
-        // test to see if the strings are the same
+    @Test
+    void save(){
 
 
     }
 
-    void displayCompleted(){
-        // create a LinkedList<obj> w/ f ull objects
-        //  -important some completed some not
-        // call displayCompleted and assign result to a string
-        // create an expected output string
-        // check to see if they are the same
+    @Test
+    void load_list(){
 
 
     }
 
-    void displayIncomplete(){
-        // create a LinkedList<obj> w/ f ull objects
-        //  -important some completed some not
-        // call displayIncomplete and assign result to a string
-        // create an expected output string
-        // check to see if they are the same
-
-
-    }
-
-    void saveList_test(){
-        // works for every todoList (single and multiple)
-
-        // create an expected result text file, following ideal formatting
-        // create a LinkedList<obj> w/ exact replicant data placed into the rext file above
-        // call saveList() w/ created LinkedList
-        // check to see if the files are equivalent
-
-
-    }
-
-    void loadList_ToDoControllerMenu(){
-        // works for every todoList (single and multiple)
-
-        // create an expected result LinkedList file, following ideal formatting
-        // create a text file w/ exact replicant data placed into the LinkedList above
-        // call loadList() on the text file
-        // call displayAll() on both LinkedList and store into separate strings
-        // check to see if the result strings are equivalent
+    @Test
+    void Rey_tribute(){
 
 
     }
 
 }
+
+//TODO UPDATE PUML

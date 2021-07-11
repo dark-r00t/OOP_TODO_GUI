@@ -24,7 +24,7 @@ public class TaskToDoController {
     public TextField updateTaskTextBox;
     public ListView<String> taskList;
     public ObservableList<String> selected;
-    public static LinkedList<TaskToDoObj> tasks;
+    public static LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
     @FXML
     public void listClicked() {
@@ -117,7 +117,7 @@ public class TaskToDoController {
 
         try {
             for (String task : selected) {
-                deleteTask(task);
+                deleteTaskStart(task);
             }
         } catch (Exception e) {
             System.out.println("Failed to remove item...");
@@ -146,13 +146,15 @@ public class TaskToDoController {
         // refresh display w/ removeAll() displayALL()
 
         selected = taskList.getSelectionModel().getSelectedItems();
+        String newDescription = updateTaskTextBox.getText();
 
         for (String taskSelected : selected) {
             for (TaskToDoObj taskToInspect : tasks) {
                 if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
                     try {
-                        editDescription(taskToInspect);
-                        // tasks.remove(i);
+                        if (!newDescription.equalsIgnoreCase("")) {
+                            editDescription(taskToInspect, newDescription);
+                        }
                         removeAll();
                         displayAll();
                     } catch (Exception e) {
@@ -233,18 +235,30 @@ public class TaskToDoController {
         // takes data inside of selected.txt and transforms it into a linked list
 
         tasks = FileHandler.tasks();
+
         removeAll();
         displayAll();
     }
 
+
     @FXML
     public void clearAll() throws IOException {
         // calls writeHeader() to retain list name
+        // removes all items from linked list
         // ignores all other data
         // updates screen
 
         FileHandler.writeHeader();
+
+        clearList(tasks);
+
         removeAll();
+    }
+
+    public static void clearList(LinkedList<TaskToDoObj> list) {
+        while (!list.isEmpty()) {
+            list.remove();
+        }
     }
 
     public void displayAll() {
@@ -252,7 +266,9 @@ public class TaskToDoController {
 
         try {
             for (TaskToDoObj task : tasks) {
-                generalDisplaySetup(task);
+                String data = generalDisplaySetup(task);
+                System.out.println(data);
+                taskList.getItems().add(data);
             }
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
@@ -276,7 +292,8 @@ public class TaskToDoController {
         // attempt to display task input
 
         try {
-            generalDisplaySetup(task);
+            String data = generalDisplaySetup(task);
+            taskList.getItems().add(data);
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
@@ -286,7 +303,8 @@ public class TaskToDoController {
         // attempt to display task input
 
         try {
-            generalDisplaySetup(task);
+            String data = generalDisplaySetup(task);
+            taskList.getItems().add(data);
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
@@ -306,7 +324,7 @@ public class TaskToDoController {
         item.setComplete(false);
     }
 
-    public void deleteTask(String taskToDelete) {
+    public void deleteTaskStart(String taskToDelete) {
         // for loop set to total task size
         // find the item w/ the same name and description inside of the collection of tasks
         // when the item is found call renewFile(tasks matched item)
@@ -318,13 +336,19 @@ public class TaskToDoController {
                 try {
                     FileHandler.renewFileAfterDelete(tasks.get(i));
 
-                    tasks.remove(i);
+                    deleteTask(tasks, i);
                     taskList.getItems().remove(taskToDelete);
                 } catch (Exception e) {
                     System.out.println("Failed to remove item.");
                 }
             }
         }
+    }
+
+    public static void deleteTask(LinkedList<TaskToDoObj> list, int i) {
+        // removes a specific task
+
+        list.remove(i);
     }
 
     public void addNewTask(String title, String description, String date) {
@@ -338,43 +362,46 @@ public class TaskToDoController {
             System.out.println("Missing information in text field.");
         } else {
             if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
-                generateNewTask(title, description, date);
+                String item = generateNewTask(tasks, title, description, date);
+                taskList.getItems().add(item);
             } else {
                 System.out.println("Please, re-enter the data.");
             }
         }
     }
 
-    public void generateNewTask(String title, String description, String date) {
+    public static String generateNewTask(LinkedList<TaskToDoObj> list, String title, String description, String date) {
         // take all necessary data
         // try to create a new TaskToDoObj with data
         // display the new item using generalDisplaySetup()
 
         try {
             TaskToDoObj item = new TaskToDoObj(title, date, description, false);
-            tasks.add(item);
-            generalDisplaySetup(item);
+            list.add(item);
+            return generalDisplaySetup(item);
         } catch (Exception e) {
-            System.out.println("Failed to create a new task.");
+            System.out.println("Error displaying new item.");
         }
+        return "";
     }
 
-    public void editDescription(TaskToDoObj item) {
+    public static boolean editDescription(TaskToDoObj item, String newDescription) {
         // take in an item
         // change the description with what's in the text field
         // - only if the provided description is <= 256
 
-        String newDescription = getTypedDescription();
-
         try {
             if (newDescription.length() <= 256) {
                 item.setDescription(newDescription);
+                return true;
             } else {
                 System.out.println("Item description is too long!");
             }
         } catch (Exception e) {
             System.out.println("Invalid item selected, cannot change the description.");
         }
+
+        return false;
     }
 
     public void changeDate(TaskToDoObj item) {
@@ -382,7 +409,7 @@ public class TaskToDoController {
         // change the date with what's in the text field
         // - only if the provided date is in the correct format
 
-        String newDate = getTypedDate();
+        String newDate = updateTaskTextBox.getText();
 
         try {
             if (CastedUtilityGeneral.checkDateFormat(newDate)) {
@@ -433,7 +460,7 @@ public class TaskToDoController {
     }
 
     //TODO FIX ALIGNMENT ISSUES
-    public void generalDisplaySetup(TaskToDoObj task) {
+    public static String generalDisplaySetup(TaskToDoObj task) {
         // add name description and date with appropriate spacing and adds the string into the view
 
         StringBuilder items = new StringBuilder();
@@ -450,7 +477,7 @@ public class TaskToDoController {
 
         items.append((task.getDate()));
 
-        taskList.getItems().add(items.toString());
+        return items.toString();
     }
 
     public String getTypedTitle() {
