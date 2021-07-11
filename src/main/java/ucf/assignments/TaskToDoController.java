@@ -13,7 +13,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,6 +39,7 @@ public class TaskToDoController {
 
     @FXML
     public void displayAllTasksButton() {
+        // remove current display
         // call displayAll()
 
         removeAll();
@@ -47,10 +47,7 @@ public class TaskToDoController {
     }
 
     public void displayAll() {
-        // take data from linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // reload display
+        // for every available task call generalDisplaySetup()
 
         try {
             for (TaskToDoObj task : tasks) {
@@ -63,27 +60,23 @@ public class TaskToDoController {
 
     @FXML
     public void displayCompletedTasksButton() {
-        // call displayCompleted()
+        // remove current display
+        // call displayCompleted() for every completed task
 
         removeAll();
-        displayCompleted();
+
+        for (TaskToDoObj task : tasks) {
+            if (task.isComplete()) {
+                displayCompleted(task);
+            }
+        }
     }
 
-    public void displayCompleted() {
-        // make a new linked list
-        // run loop adding every item marked as complete into new linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // display the new linked list
-        // save all new data into a string and return (for testing)
+    public void displayCompleted(TaskToDoObj task) {
+        // attempt to display task input
 
         try {
-            for (TaskToDoObj task : tasks) {
-
-                if (task.isComplete()) {
-                    generalDisplaySetup(task);
-                }
-            }
+            generalDisplaySetup(task);
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
@@ -91,27 +84,23 @@ public class TaskToDoController {
 
     @FXML
     public void displayIncompleteTasksButton() {
-        // call displayIncomplete()
+        // remove current display
+        // call displayIncomplete() for every uncompleted task
 
         removeAll();
-        displayIncomplete();
+
+        for (TaskToDoObj task : tasks) {
+            if (!task.isComplete()) {
+                displayIncomplete(task);
+            }
+        }
     }
 
-    public void displayIncomplete() {
-        // make a new linked list
-        // run loop adding every item marked as incomplete into new linked list
-        // modify for linked list display compatibility and general reformatting
-        // take all data and place into an output string (for testing)
-        // display the new linked list
-        // save all new data into a string and return (for testing)
+    public void displayIncomplete(TaskToDoObj task) {
+        // attempt to display task input
 
         try {
-            for (TaskToDoObj task : tasks) {
-
-                if (!task.isComplete()) {
-                    generalDisplaySetup(task);
-                }
-            }
+            generalDisplaySetup(task);
         } catch (Exception e) {
             System.out.println("Failed to display all items.");
         }
@@ -119,60 +108,65 @@ public class TaskToDoController {
 
     @FXML
     public void markAsCompleteButton() {
-        // call markAsComplete()
+        // updates selected for every item selected by the user
+        // for there is an item selected
+        // find the task with same name and description
+        // if there is a match call markAsComplete
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
-
-        for (int i = 0; i < selected.size(); i++) {
-
-            String task = selected.get(i);
-            if (task.contains(tasks.get(i).getName())) {
-                markAsComplete(tasks.get(i));
+        for (String taskSelected : selected) {
+            for (TaskToDoObj taskToInspect : tasks) {
+                if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
+                    markAsComplete(taskToInspect);
+                }
             }
         }
     }
 
     public void markAsComplete(TaskToDoObj item) {
-        // get item from taskClicked
-        // look for that item in the linked list
-        // change that index's boolean complete to true
+        // take a TaskToDo object
+        // check its complete status to true
 
         item.setComplete(true);
     }
 
     @FXML
     public void markAsIncompleteButton() {
+        // updates selected for every item selected by the user
+        // for there is an item selected
+        // find the task with same name and description
+        // if there is a match call markAsIncomplete()
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
-
-        for (int i = 0; i < selected.size(); i++) {
-
-            String task = selected.get(i);
-            if (task.contains(tasks.get(i).getName())) {
-                markAsIncomplete(tasks.get(i));
+        for (String taskSelected : selected) {
+            for (TaskToDoObj taskToInspect : tasks) {
+                if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
+                    markAsIncomplete(taskToInspect);
+                }
             }
         }
     }
 
     public void markAsIncomplete(TaskToDoObj item) {
-        // get item from taskClicked
-        // look for that item in the linked list
-        // change that index's boolean complete to true
+        // take a TaskToDo object
+        // check its complete status to false
 
         item.setComplete(false);
     }
 
+    // TODO here
     @FXML
     public void deleteTaskButton() {
-        // call deleteTask()
+        // update selected to every selected item
+        // for there is a string selected
+        // call deleteTask() with the selected string
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
         try {
             for (String task : selected) {
-
                 deleteTask(task);
             }
         } catch (Exception e) {
@@ -180,17 +174,20 @@ public class TaskToDoController {
         }
     }
 
-    public void deleteTask(String task) {
-        // search for selected task in linked list
-        // remove item
+    public void deleteTask(String taskToDelete) {
+        // for loop set to total task size
+        // find the item w/ the same name and description inside of the collection of tasks
+        // when the item is found call renewFile(tasks matched item)
+        // remove the tasks from the linked list
+        // remove the task from the display
 
         for (int i = 0; i < tasks.size(); i++) {
-            if (task.contains(tasks.get(i).getName())) {
+            if (taskToDelete.contains(tasks.get(i).getName()) && taskToDelete.contains(tasks.get(i).getDescription())) {
                 try {
                     FileHandler.renewFileAfterDelete(tasks.get(i));
 
                     tasks.remove(i);
-                    taskList.getItems().remove(task);
+                    taskList.getItems().remove(taskToDelete);
                 } catch (Exception e) {
                     System.out.println("Failed to remove item.");
                 }
@@ -200,25 +197,27 @@ public class TaskToDoController {
 
     @FXML
     public void addNewTaskButton() {
-        // call addNewTask()
-
-        addNewTask();
-    }
-
-    public void addNewTask() {
-        // get data from textbox
-        // add all data into an ToDoItemobj
-        // add obj to linked list
-        // update display
+        // gather all the user provided inputs
+        // call addNewTask() with data provided
 
         String title = getTypedTitle();
         String description = getTypedDescription();
         String date = getTypedDate();
 
+        addNewTask(title, description, date);
+    }
+
+    public void addNewTask(String title, String description, String date) {
+        // if any text field is missing data stop and wait for correct data
+        // else if all the data provided has something available
+        // - check to make sure if the provided date is in the right format and the description is <= 256
+        // - - if it is call generateNewTask
+        // - - otherwise ask for new date input
+
         if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
             System.out.println("Missing information in text field.");
         } else {
-            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() < 256 + 1) {
+            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
                 generateNewTask(title, description, date, false);
             } else {
                 System.out.println("Please, re-enter the data.");
@@ -227,6 +226,9 @@ public class TaskToDoController {
     }
 
     public void generateNewTask(String title, String description, String date, boolean complete) {
+        // take all necessary data
+        // try to create a new TaskToDoObj with data
+        // display the new item using generalDisplaySetup()
 
         try {
             TaskToDoObj item = new TaskToDoObj(title, date, description, complete);
@@ -239,33 +241,48 @@ public class TaskToDoController {
 
     @FXML
     public void editDescription() {
-        // call editDescriptionInit()
-
-        int index = -1;
+        // takes all selected items
+        // for every selected task
+        // for every task available in the tasks linked list
+        // if the task selected matches any task in the list w/ the same name and description
+        // edit the description of object
+        // refresh display w/ removeAll() displayALL()
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
-        for (int i = 0; i < selected.size(); i++) {
-
-            String task = selected.get(i);
-            if (task.contains(tasks.get(i).getName())) {
-                index = i;
+        for (String taskSelected : selected) {
+            int i = 0;
+            for (TaskToDoObj taskToInspect : tasks) {
+                if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
+                    try {
+                        editDescription(taskToInspect);
+                        // tasks.remove(i);
+                        removeAll();
+                        displayAll();
+                    } catch (Exception e) {
+                        System.out.println("Failed to edit description.");
+                    }
+                    break;
+                }
+                i++;
             }
+            break;
         }
-
-        editDescriptionInit(index);
     }
 
-    public void editDescriptionInit(int index) {
-        // look for listClicked in the linked list
-        // take that index and change the .description of the obj w/ what's in the text field
-        // update display
+    public void editDescription(TaskToDoObj item) {
+        // take in an item
+        // change the description with what's in the text field
+        // - only if the provided description is <= 256
+
+        String newDescription = updateTaskTextBox.getText();
 
         try {
-            tasks.get(index).setDescription(updateTaskTextBox.getText());
-            removeAll();
-            generateNewTask(tasks.get(index).getName(), tasks.get(index).getDescription(), tasks.get(index).getDate(), tasks.get(index).isComplete());
-            tasks.remove(index);
+            if (newDescription.length() <= 256) {
+                item.setDescription(newDescription);
+            } else {
+                System.out.println("Item description is too long!");
+            }
         } catch (Exception e) {
             System.out.println("Invalid item selected, cannot change the description.");
         }
@@ -273,33 +290,46 @@ public class TaskToDoController {
 
     @FXML
     public void changeDate() {
-        // call changeDateInit()
+        // takes all selected items
+        // for every selected task
+        // for every task available in the tasks linked list
+        // if the task selected matches any task in the list w/ the same name and description
+        // edit the date of object
+        // refresh display w/ removeAll() displayALL()
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
-        for (int i = 0; i < selected.size(); i++) {
-
-            String task = selected.get(i);
-            if (task.contains(tasks.get(i).getName())) {
-                changeDateInit(tasks.get(i), i);
+        for (String taskSelected : selected) {
+            int i = 0;
+            for (TaskToDoObj taskToInspect : tasks) {
+                if (taskSelected.contains(taskToInspect.getName()) && taskSelected.contains(taskToInspect.getDescription())) {
+                    try {
+                        changeDate(taskToInspect);
+                        removeAll();
+                        displayAll();
+                    } catch (Exception e) {
+                        System.out.println("Failed to edit description.");
+                    }
+                    break;
+                }
+                i++;
             }
+            break;
         }
     }
 
-    public void changeDateInit(TaskToDoObj item, int index) {
-        // get text from dateTextBox
-        // get userSelectedTask
-        // check to see if format is correct
-        // call modifyDateText()
+    public void changeDate(TaskToDoObj item) {
+        // take in an item
+        // change the date with what's in the text field
+        // - only if the provided date is in the correct format
 
         String newDate = updateTaskTextBox.getText();
 
         try {
-            if(CastedUtilityGeneral.checkDateFormat(newDate)){
-                tasks.get(index).setDate(newDate);
-                removeAll();
-                generateNewTask(tasks.get(index).getName(), tasks.get(index).getDescription(), tasks.get(index).getDate(), tasks.get(index).isComplete());
-                tasks.remove(index);
+            if (CastedUtilityGeneral.checkDateFormat(newDate)) {
+                item.setDate(newDate);
+            } else {
+                System.out.println("Date is not in the correct format.");
             }
         } catch (Exception e) {
             System.out.println("Invalid item selected, cannot change the description.");
@@ -308,57 +338,52 @@ public class TaskToDoController {
 
     @FXML
     public void saveAllToDoButton() {
-        // call save()
+        // finds the correct index to store the file
+        // calls save() with found index
+        // opens save popup to display name of saved file and the path
+        // break to stop loop (index to save was already found at this point)
 
         selected = taskList.getSelectionModel().getSelectedItems();
 
-        save();
-    }
-
-    public void save() {
-        // call saveList from ToDoControllerMenu w/ the currently selected list
-
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
-                File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-                File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
-
-                try {
-                    StringBuilder content = new StringBuilder(FileHandler.removeExtraNewLines());
-
-                    for (TaskToDoObj task : tasks) {
-                        if (!content.toString().contains(task.getName()) && !content.toString().contains(task.getDescription())) {
-                            content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
-                        }
-                    }
-
-                    String output = content.toString();
-
-                    while (output.contains("\n\n")) {
-                        output = output.replace("\n\n", "\n");
-                    }
-
-                    output = output.substring(0, output.length() - 1);
-
-                    FileWriter fw = new FileWriter(oldFile);
-                    fw.write(output);
-                    fw.close();
-
-                } catch (IOException e) {
-                    System.out.println("Failed to add additional tasks to the save file.");
-                }
-
-                try {
-                    Files.copy(oldFile.toPath(), newFile.toPath());
-                } catch (Exception e) {
-                    System.out.println("Failed to copy files.");
-                }
+                save(i);
 
                 SceneController.savePopUp("save_" + i + ".txt");
 
                 break;
             }
         }
+
+    }
+
+    public void save(int i) {
+
+        File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+
+        try {
+            StringBuilder content = new StringBuilder();
+
+            for (TaskToDoObj task : tasks) {
+                content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
+            }
+
+            String output = content.toString();
+
+            while (output.contains("\n\n")) {
+                output = output.replace("\n\n", "\n");
+            }
+
+            output = output.substring(0, output.length() - 1);
+
+            FileWriter fw = new FileWriter(newFile);
+            fw.write(output);
+            fw.close();
+
+        } catch (IOException e) {
+            System.out.println("Failed to add additional tasks to the save file.");
+        }
+
     }
 
     @FXML
