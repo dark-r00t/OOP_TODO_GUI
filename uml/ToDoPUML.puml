@@ -5,7 +5,42 @@ class ToDo {
     + start()
 }
 
-class ToDoControllerMenu {
+class CastedUtilityGeneral {
+    + addToDoSaveFolder()
+    + createTempFolder()
+    + removeTempFiles()
+    + tempDirec()
+    + indexer()
+    + checkDateFormat(String)
+}
+
+class FileHandler {
+    + tasks()
+    + renewFileAfterDelete(TaskToDoObj)
+    + writeHeader()
+    --
+    - readSelectedFile()
+    - fileSelectedGenerator()
+    - removeTaskFileData()
+}
+
+class HelpToDoMenuController {
+}
+
+class HelpToDoTaskController {
+}
+
+class ListToDoController {
+    + public SplitPane mainPane
+    + TextField titleToDoTextBox
+    + SplitPane splitPane
+    + ListView<ListToDoObj> todoList
+    + static ListToDoObj pass
+    + static ListToDoObj temp
+    + ObservableList<ListToDoObj> selected
+    + LinkedList<ListToDoObj> allItems
+    --
+    @FXML
     + addNewToDoButton()
     + deleteToDoButton()
     + editNameToDoButton()
@@ -13,87 +48,127 @@ class ToDoControllerMenu {
     + selectToDoButton()
     + saveList()
     + loadList()
-    ..Items..
-    * SplitPane : mainPane
-    * TextField : titleToDoTextBox
-    * SplitPane: splitPane
-    * ListView : todoList
-    * ListView : selected
+    + helpMenu()
+    --
+    + addItem(String name)
+    + deleteItem(ListToDoObj item)
+    + removeFile(int txt)
+    + editName(ListToDoObj item)
+    + selectToDo(ListToDoObj item)
+    + saveSelectedList(ListToDoObj item)
+    + loadListFile() throws IOException
+    + formatFile(File selectedFile)
+    + storeData(ListToDoObj item)
+    + updateIndex(int index)
 }
 
-class ToDoList {
-    + ToDoList()
-    + addItem()
-    + removeItem()
-    + editName()
-    ..Variables..
-    * String : name
-    * LinkedList<ToDoTasks> : list
-    * int : amount
+class ListToDoObj {
+    - String name
+    - static LinkedList<TaskToDoObj> list
+    - int amount
+    - int index
+    --
+    + getName()
+    + setName(String name)
+    + getList()
+    + setList(LinkedList<TaskToDoObj> list)
+    + getAmount()
+    + setAmount(int amount)
+    + getIndex()
+    + setIndex(int index)
+    + ListToDoObj(String name)
+    --
+    + toString()
 }
 
-class ToDoControllerTask {
+class SceneController {
+    + switchToMenu()
+    + switchToTask()
+    + menuHelp()
+    + taskHelp()
+    + savePopUp(String name)
+}
+
+class TaskToDoController {
+    + SplitPane mainPane
+    + SplitPane splitPane
+    + TextField descriptionTaskTextBox
+    + TextField dateTextBox
+    + TextField titleTaskTextBox
+    + TextField updateTaskTextBox
+    + ListView<String> taskList
+    + ObservableList<String> selected
+    + static LinkedList<TaskToDoObj> tasks
+    --
+    @FXML
     + listClicked()
-    + displayAllTaskButton()
-    + displayCompleteTaskButton()
+    + displayAllTasksButton()
+    + displayCompletedTasksButton()
     + displayIncompleteTasksButton()
     + markAsCompleteButton()
+    + markAsIncompleteButton()
     + deleteTaskButton()
     + addNewTaskButton()
-    + modifyDateText()
-    + saveAllToDoButton()
-    + goBack()
-    ..Items..
-    * SplitPane : mainPane
-    * SplitPane : splitPane
-    * TextField : descriptionTaskTextBox
-    * DatePicker : dateTextBox
-    * TextField : titleTaskTextBox
-    * TextField : updateTaskTextBox
-    * ListView : taskList
-    ..Variables..
-    * String : taskClicked
-    * LinkedList<ToDoItem> : items
-    * String : userDirec
-}
-
-class ToDoTaskUtility {
-    + specificUserDirec()
-    + getUserData()
-    + displayAll()
-    + displayCompleted()
-    + displayIncomplete()
-    + markAsComplete()
-    + deleteTask()
-    + addNewTask()
     + editDescription()
     + changeDate()
-    + changeDateInit()
-    + save()
+    + saveAllToDoButton()
+    + goBack()
+    + helpTask()
+    + refreshButton()
+    + clearAll()
+    --
+    + displayAll()
+    + removeAll()
+    + displayCompleted(TaskToDoObj task)
+    + displayIncomplete(TaskToDoObj task)
+    + markAsComplete(TaskToDoObj item)
+    + markAsIncomplete(TaskToDoObj item)
+    + deleteTask(String taskToDelete)
+    + addNewTask(String title, String description, String date)
+    + generateNewTask(String title, String description, String date, boolean complete)
+    + editDescription(TaskToDoObj item)
+    + changeDate(TaskToDoObj item)
+    + save(int i)
+    + generalDisplaySetup(TaskToDoObj task)
+    + getTypedTitle()
+    + getTypedDate()
+    + getTypedDescription()
 }
 
-class ToDoItem {
-    * ToDoItem
-    - name
-    - date
-    - description
-    - complete
-    ..Variables..
-    * String : name
-    * String : date
-    * String : description
-    * boolean : complete
+class TaskToDoObj {
+    - String name
+    - String date
+    - String description
+    - boolean complete
+    --
+    + String getName()
+    + setName(String name)
+    + getDate()
+    + setDate(String date)
+    + getDescription()
+    + setDescription(String description)
+    + isComplete()
+    + setComplete(boolean complete)
+    + TaskToDoObj(name, date, description, complete)
 }
 
-openjfx.Application <|- ToDo
+ToDo -|> openjfx.Application
 
-ToDo - ToDoControllerMenu
+ToDo -- ListToDoController
+ListToDoController --- FileHandler
+ListToDoController --- CastedUtilityGeneral
+ListToDoController - ListToDoObj
 
-ToDoControllerMenu - ToDoControllerTask
-ToDoControllerMenu -- ToDoList
+TaskToDoController --- FileHandler
+TaskToDoController --- CastedUtilityGeneral
+TaskToDoController - TaskToDoObj
 
-ToDoControllerTask - ToDoControllerMenu
-ToDoControllerTask -- ToDoItem
-ToDoControllerTask - ToDoTaskUtility
+ListToDoController - SceneController
+TaskToDoController - SceneController
+
+SceneController --> ListToDoController
+SceneController --> TaskToDoController
+SceneController --> HelpToDoMenuController
+SceneController --> HelpToDoTaskController
 
 @enduml

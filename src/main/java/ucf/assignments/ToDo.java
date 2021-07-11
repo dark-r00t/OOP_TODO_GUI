@@ -45,6 +45,5 @@ public class ToDo extends Application {
     }
 }
 
-//TODO update help scene
 //TODO update puml
 //TODO create test cases

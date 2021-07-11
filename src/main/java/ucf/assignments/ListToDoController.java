@@ -26,8 +26,7 @@ public class ListToDoController {
     public static ListToDoObj pass;
     public static ListToDoObj temp;
     public ObservableList<ListToDoObj> selected;
-
-    LinkedList<ListToDoObj> allItems = new LinkedList<>();
+    public LinkedList<ListToDoObj> allItems = new LinkedList<>();
 
     @FXML
     public void addNewToDoButton() throws IOException {
@@ -36,6 +35,83 @@ public class ListToDoController {
         String name = titleToDoTextBox.getText();
 
         addItem(name);
+    }
+
+    @FXML
+    public void deleteToDoButton() {
+        // gets every selected item
+        // run loop for every selected item
+        // call deleteItem(index of selected item)
+
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        for (ListToDoObj i : selected) {
+            deleteItem(i);
+        }
+    }
+
+    @FXML
+    public void editNameToDoButton() throws IOException {
+        // get every selected item
+        // for every item selected call edit name with the selected object
+
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        for (ListToDoObj item : selected) {
+            editName(item);
+        }
+    }
+
+    @FXML
+    public void listClicked() {
+        // allow for multiple items
+        // save selected accordingly
+
+        todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    @FXML
+    public void selectToDoButton() throws IOException {
+        // get the selected item
+        // call selectToDo()
+        // open new scene
+        // break loop as to only allow for the first clicked item
+
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        for (ListToDoObj i : selected) {
+            selectToDo(i);
+            SceneController.switchToTask();
+
+            break;
+        }
+
+    }
+
+    @FXML
+    public void saveList() {
+        // create an observable list with all selected items
+        // run a loop and store each list carefully into a txt file
+
+        selected = todoList.getSelectionModel().getSelectedItems();
+
+        for (ListToDoObj item : selected) {
+            saveSelectedList(item);
+        }
+    }
+
+    @FXML
+    public void loadList() throws IOException {
+        // calls loadListFile()
+
+        loadListFile();
+    }
+
+    @FXML
+    public void helpMenu() throws IOException {
+        // opens help scene
+
+        SceneController.menuHelp();
     }
 
     public void addItem(String name) throws IOException {
@@ -50,19 +126,6 @@ public class ListToDoController {
         allItems.add(item);
 
         storeData(item);
-    }
-
-    @FXML
-    public void deleteToDoButton() {
-        // gets every selected item
-        // run loop for every selected item
-        // call deleteItem(index of selected item)
-
-        selected = todoList.getSelectionModel().getSelectedItems();
-
-        for (ListToDoObj i : selected) {
-            deleteItem(i);
-        }
     }
 
     public void deleteItem(ListToDoObj item) {
@@ -101,18 +164,6 @@ public class ListToDoController {
         }
     }
 
-    @FXML
-    public void editNameToDoButton() throws IOException {
-        // get every selected item
-        // for every item selected call edit name with the selected object
-
-        selected = todoList.getSelectionModel().getSelectedItems();
-
-        for (ListToDoObj item : selected) {
-            editName(item);
-        }
-    }
-
     public void editName(ListToDoObj item) throws IOException {
         // set the temp object equal to the item object
         // store temp w/ the new name
@@ -128,32 +179,6 @@ public class ListToDoController {
         todoList.getItems().remove(item);
     }
 
-    @FXML
-    public void listClicked() {
-        // allow for multiple items
-        // save selected accordingly
-
-        todoList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    }
-
-    @FXML
-    public void selectToDoButton() throws IOException {
-        // get the selected item
-        // call selectToDo()
-        // open new scene
-        // break loop as to only allow for the first clicked item
-
-        selected = todoList.getSelectionModel().getSelectedItems();
-
-        for (ListToDoObj i : selected) {
-            selectToDo(i);
-            SceneController.switchToTask();
-
-            break;
-        }
-
-    }
-
     public void selectToDo(ListToDoObj item) {
         // takes the selected item
         // copies data of the selected item into selected.txt
@@ -167,18 +192,6 @@ public class ListToDoController {
             Files.copy(oldFile.toPath(), newFile.toPath());
         } catch (Exception e) {
             System.out.println("Failed to update index.");
-        }
-    }
-
-    @FXML
-    public void saveList() {
-        // create an observable list with all selected items
-        // run a loop and store each list carefully into a txt file
-
-        selected = todoList.getSelectionModel().getSelectedItems();
-
-        for (ListToDoObj item : selected) {
-            saveSelectedList(item);
         }
     }
 
@@ -207,13 +220,6 @@ public class ListToDoController {
                 break;
             }
         }
-    }
-
-    @FXML
-    public void loadList() throws IOException {
-        // calls loadListFile()
-
-        loadListFile();
     }
 
     public void loadListFile() throws IOException {
@@ -334,15 +340,7 @@ public class ListToDoController {
             }
 
             System.out.println(i);
-
         }
-    }
-
-    @FXML
-    public void helpMenu() throws IOException {
-        // opens help scene
-
-        SceneController.menuHelp();
     }
 
 }

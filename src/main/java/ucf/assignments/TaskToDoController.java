@@ -12,9 +12,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 
 public class TaskToDoController {
@@ -45,18 +43,6 @@ public class TaskToDoController {
         displayAll();
     }
 
-    public void displayAll() {
-        // for every available task call generalDisplaySetup()
-
-        try {
-            for (TaskToDoObj task : tasks) {
-                generalDisplaySetup(task);
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
-        }
-    }
-
     @FXML
     public void displayCompletedTasksButton() {
         // remove current display
@@ -71,16 +57,6 @@ public class TaskToDoController {
         }
     }
 
-    public void displayCompleted(TaskToDoObj task) {
-        // attempt to display task input
-
-        try {
-            generalDisplaySetup(task);
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
-        }
-    }
-
     @FXML
     public void displayIncompleteTasksButton() {
         // remove current display
@@ -92,16 +68,6 @@ public class TaskToDoController {
             if (!task.isComplete()) {
                 displayIncomplete(task);
             }
-        }
-    }
-
-    public void displayIncomplete(TaskToDoObj task) {
-        // attempt to display task input
-
-        try {
-            generalDisplaySetup(task);
-        } catch (Exception e) {
-            System.out.println("Failed to display all items.");
         }
     }
 
@@ -123,13 +89,6 @@ public class TaskToDoController {
         }
     }
 
-    public void markAsComplete(TaskToDoObj item) {
-        // take a TaskToDo object
-        // check its complete status to true
-
-        item.setComplete(true);
-    }
-
     @FXML
     public void markAsIncompleteButton() {
         // updates selected for every item selected by the user
@@ -146,13 +105,6 @@ public class TaskToDoController {
                 }
             }
         }
-    }
-
-    public void markAsIncomplete(TaskToDoObj item) {
-        // take a TaskToDo object
-        // check its complete status to false
-
-        item.setComplete(false);
     }
 
     @FXML
@@ -172,27 +124,6 @@ public class TaskToDoController {
         }
     }
 
-    public void deleteTask(String taskToDelete) {
-        // for loop set to total task size
-        // find the item w/ the same name and description inside of the collection of tasks
-        // when the item is found call renewFile(tasks matched item)
-        // remove the tasks from the linked list
-        // remove the task from the display
-
-        for (int i = 0; i < tasks.size(); i++) {
-            if (taskToDelete.contains(tasks.get(i).getName()) && taskToDelete.contains(tasks.get(i).getDescription())) {
-                try {
-                    FileHandler.renewFileAfterDelete(tasks.get(i));
-
-                    tasks.remove(i);
-                    taskList.getItems().remove(taskToDelete);
-                } catch (Exception e) {
-                    System.out.println("Failed to remove item.");
-                }
-            }
-        }
-    }
-
     @FXML
     public void addNewTaskButton() {
         // gather all the user provided inputs
@@ -203,38 +134,6 @@ public class TaskToDoController {
         String date = getTypedDate();
 
         addNewTask(title, description, date);
-    }
-
-    public void addNewTask(String title, String description, String date) {
-        // if any text field is missing data stop and wait for correct data
-        // else if all the data provided has something available
-        // - check to make sure if the provided date is in the right format and the description is <= 256
-        // - - if it is call generateNewTask
-        // - - otherwise ask for new date input
-
-        if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
-            System.out.println("Missing information in text field.");
-        } else {
-            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
-                generateNewTask(title, description, date, false);
-            } else {
-                System.out.println("Please, re-enter the data.");
-            }
-        }
-    }
-
-    public void generateNewTask(String title, String description, String date, boolean complete) {
-        // take all necessary data
-        // try to create a new TaskToDoObj with data
-        // display the new item using generalDisplaySetup()
-
-        try {
-            TaskToDoObj item = new TaskToDoObj(title, date, description, complete);
-            tasks.add(item);
-            generalDisplaySetup(item);
-        } catch (Exception e) {
-            System.out.println("Failed to create a new task.");
-        }
     }
 
     @FXML
@@ -266,24 +165,6 @@ public class TaskToDoController {
         }
     }
 
-    public void editDescription(TaskToDoObj item) {
-        // take in an item
-        // change the description with what's in the text field
-        // - only if the provided description is <= 256
-
-        String newDescription = getTypedDescription();
-
-        try {
-            if (newDescription.length() <= 256) {
-                item.setDescription(newDescription);
-            } else {
-                System.out.println("Item description is too long!");
-            }
-        } catch (Exception e) {
-            System.out.println("Invalid item selected, cannot change the description.");
-        }
-    }
-
     @FXML
     public void changeDate() {
         // takes all selected items
@@ -312,24 +193,6 @@ public class TaskToDoController {
         }
     }
 
-    public void changeDate(TaskToDoObj item) {
-        // take in an item
-        // change the date with what's in the text field
-        // - only if the provided date is in the correct format
-
-        String newDate = getTypedDate();
-
-        try {
-            if (CastedUtilityGeneral.checkDateFormat(newDate)) {
-                item.setDate(newDate);
-            } else {
-                System.out.println("Date is not in the correct format.");
-            }
-        } catch (Exception e) {
-            System.out.println("Invalid item selected, cannot change the description.");
-        }
-    }
-
     @FXML
     public void saveAllToDoButton() {
         // finds the correct index to store the file
@@ -349,38 +212,6 @@ public class TaskToDoController {
             }
         }
 
-    }
-
-    public void save(int i) {
-        // create a file with provided index at ToDO_Files/save_found-index#.txt
-        // try to compile all the contents with in the tasks linked list into a single string
-        // replace back to back newlines with a single newline for as long as there is a back to back new line
-        // remove additional new line from the file
-        // write compounded string into the save file
-
-        File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
-
-        try {
-            StringBuilder content = new StringBuilder();
-
-            for (TaskToDoObj task : tasks) {
-                content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
-            }
-
-            String output = content.toString();
-
-            while (output.contains("\n\n")) {
-                output = output.replace("\n\n", "\n");
-            }
-
-            output = output.substring(0, output.length() - 1);
-
-            FileWriter fw = new FileWriter(newFile);
-            fw.write(output);
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("Failed to add additional tasks to the save file.");
-        }
     }
 
     @FXML
@@ -416,6 +247,18 @@ public class TaskToDoController {
         removeAll();
     }
 
+    public void displayAll() {
+        // for every available task call generalDisplaySetup()
+
+        try {
+            for (TaskToDoObj task : tasks) {
+                generalDisplaySetup(task);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to display all items.");
+        }
+    }
+
     public void removeAll() {
         // while there is an item in the display
         // remove it
@@ -426,6 +269,166 @@ public class TaskToDoController {
             } catch (Exception e) {
                 System.out.println("Failed to remove items from display.");
             }
+        }
+    }
+
+    public void displayCompleted(TaskToDoObj task) {
+        // attempt to display task input
+
+        try {
+            generalDisplaySetup(task);
+        } catch (Exception e) {
+            System.out.println("Failed to display all items.");
+        }
+    }
+
+    public void displayIncomplete(TaskToDoObj task) {
+        // attempt to display task input
+
+        try {
+            generalDisplaySetup(task);
+        } catch (Exception e) {
+            System.out.println("Failed to display all items.");
+        }
+    }
+
+    public void markAsComplete(TaskToDoObj item) {
+        // take a TaskToDo object
+        // check its complete status to true
+
+        item.setComplete(true);
+    }
+
+    public void markAsIncomplete(TaskToDoObj item) {
+        // take a TaskToDo object
+        // check its complete status to false
+
+        item.setComplete(false);
+    }
+
+    public void deleteTask(String taskToDelete) {
+        // for loop set to total task size
+        // find the item w/ the same name and description inside of the collection of tasks
+        // when the item is found call renewFile(tasks matched item)
+        // remove the tasks from the linked list
+        // remove the task from the display
+
+        for (int i = 0; i < tasks.size(); i++) {
+            if (taskToDelete.contains(tasks.get(i).getName()) && taskToDelete.contains(tasks.get(i).getDescription())) {
+                try {
+                    FileHandler.renewFileAfterDelete(tasks.get(i));
+
+                    tasks.remove(i);
+                    taskList.getItems().remove(taskToDelete);
+                } catch (Exception e) {
+                    System.out.println("Failed to remove item.");
+                }
+            }
+        }
+    }
+
+    public void addNewTask(String title, String description, String date) {
+        // if any text field is missing data stop and wait for correct data
+        // else if all the data provided has something available
+        // - check to make sure if the provided date is in the right format and the description is <= 256
+        // - - if it is call generateNewTask
+        // - - otherwise ask for new date input
+
+        if (title.equalsIgnoreCase("") || date.equalsIgnoreCase("") || description.equalsIgnoreCase("")) {
+            System.out.println("Missing information in text field.");
+        } else {
+            if (CastedUtilityGeneral.checkDateFormat(date) && description.length() <= 256) {
+                generateNewTask(title, description, date);
+            } else {
+                System.out.println("Please, re-enter the data.");
+            }
+        }
+    }
+
+    public void generateNewTask(String title, String description, String date) {
+        // take all necessary data
+        // try to create a new TaskToDoObj with data
+        // display the new item using generalDisplaySetup()
+
+        try {
+            TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+            tasks.add(item);
+            generalDisplaySetup(item);
+        } catch (Exception e) {
+            System.out.println("Failed to create a new task.");
+        }
+    }
+
+    public void editDescription(TaskToDoObj item) {
+        // take in an item
+        // change the description with what's in the text field
+        // - only if the provided description is <= 256
+
+        String newDescription = getTypedDescription();
+
+        try {
+            if (newDescription.length() <= 256) {
+                item.setDescription(newDescription);
+            } else {
+                System.out.println("Item description is too long!");
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid item selected, cannot change the description.");
+        }
+    }
+
+    public void changeDate(TaskToDoObj item) {
+        // take in an item
+        // change the date with what's in the text field
+        // - only if the provided date is in the correct format
+
+        String newDate = getTypedDate();
+
+        try {
+            if (CastedUtilityGeneral.checkDateFormat(newDate)) {
+                item.setDate(newDate);
+            } else {
+                System.out.println("Date is not in the correct format.");
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid item selected, cannot change the description.");
+        }
+    }
+
+    public void save(int i) {
+        // create a file with provided index at ToDO_Files/save_found-index#.txt
+        // try to compile all the contents with in the tasks linked list into a single string
+        // replace back to back newlines with a single newline for as long as there is a back to back new line
+        // remove additional new line from the file
+        // write compounded string into the save file
+
+        File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
+
+        try {
+            StringBuilder content = new StringBuilder();
+            String selected_path = CastedUtilityGeneral.tempDirec() + "\\selected.txt";
+            BufferedReader br = new BufferedReader(new FileReader(selected_path));
+            String list_title = br.readLine();
+
+            content.append(list_title).append("\n");
+
+            for (TaskToDoObj task : tasks) {
+                content.append(task.getName()).append("\n").append(task.getDate()).append("\n").append(task.getDescription()).append("\n").append(task.isComplete()).append("\n");
+            }
+
+            String output = content.toString();
+
+            while (output.contains("\n\n")) {
+                output = output.replace("\n\n", "\n");
+            }
+
+            output = output.substring(0, output.length() - 1);
+
+            FileWriter fw = new FileWriter(newFile);
+            fw.write(output);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Failed to add additional tasks to the save file.");
         }
     }
 

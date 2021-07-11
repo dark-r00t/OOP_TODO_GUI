@@ -17,7 +17,7 @@ public class ListToDoObj {
     private String name;
     private static LinkedList<TaskToDoObj> list;
     private int amount;
-    public int index;
+    private int index;
 
     public String getName() {
         return name;

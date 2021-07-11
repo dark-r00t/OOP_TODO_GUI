@@ -18,8 +18,6 @@ import java.util.Objects;
 
 public class SceneController {
 
-    private static Scene scene;
-
     public static void switchToMenu() throws IOException {
         // gets the ToDoMenu.fxml
         // displays the scene
@@ -27,7 +25,7 @@ public class SceneController {
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoMenu.fxml")));
         Stage stage = new Stage();
 
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.setTitle("To-Do List Menu");
@@ -41,7 +39,7 @@ public class SceneController {
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoTask.fxml")));
         Stage stage = new Stage();
 
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.setTitle("To-Do List Task");
@@ -56,7 +54,7 @@ public class SceneController {
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoMenuHelp.fxml")));
         Stage stage = new Stage();
 
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
 
         // ALL PRAISE REY
         stage.setTitle("To-Do List Menu Helper");
@@ -71,7 +69,7 @@ public class SceneController {
         Parent root = FXMLLoader.load(Objects.requireNonNull(SceneController.class.getResource("ToDoTaskHelp.fxml")));
         Stage stage = new Stage();
 
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
 
         // ALL PRAISE REY
         stage.setTitle("To-Do List Task Helper");
@@ -95,7 +93,7 @@ public class SceneController {
         VBox popup = new VBox(20);
         popup.getChildren().addAll(label);
 
-        Scene scene = new Scene(popup,500,100);
+        Scene scene = new Scene(popup, 500, 100);
 
         stage.setScene(scene);
         stage.show();

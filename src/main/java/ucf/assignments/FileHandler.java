@@ -86,19 +86,6 @@ public class FileHandler {
         return output.toString();
     }
 
-    public static String removeExtraNewLines() throws FileNotFoundException {
-        // removes double new lines to prevent errors
-        // if the file contains two back to back new lines, replace it with a single new line
-
-        String file = readSelectedFile();
-
-        while (file.contains("\n\n")) {
-            file = file.replace("\n\n", "\n");
-        }
-
-        return file;
-    }
-
     private static void fileSelectedGenerator(String fileString) throws IOException {
         // takes the name of the file originally selected (list_#.txt)
         // copys all the data within that file into selected.txt

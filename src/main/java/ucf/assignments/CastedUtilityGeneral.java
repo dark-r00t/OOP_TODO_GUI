@@ -3,7 +3,6 @@
  *  Copyright 2021 Jan Darge
  */
 
-
 package ucf.assignments;
 
 import java.io.File;
@@ -33,30 +32,6 @@ public class CastedUtilityGeneral {
         if (ToDoFolder.mkdir()) {
             System.out.println("Created .temp folder.");
         }
-    }
-
-    public static int indexer() {
-        // looks in .temp for the next available list_#
-        // returns the available index
-
-        int i;
-        String path = tempDirec();
-
-        for (i = 1; i < 100 + 1; i++) {
-            File test = new File(path + "\\list_" + i + ".txt");
-
-            if (!test.exists()) {
-                break;
-            }
-        }
-
-        return i;
-    }
-
-    public static String tempDirec() {
-        // returns a string of the .temp folder created in the initial startup
-
-        return System.getProperty("user.dir") + "\\.temp";
     }
 
     public static void removeTempFiles() {
@@ -91,6 +66,30 @@ public class CastedUtilityGeneral {
         }
     }
 
+    public static String tempDirec() {
+        // returns a string of the .temp folder created in the initial startup
+
+        return System.getProperty("user.dir") + "\\.temp";
+    }
+
+    public static int indexer() {
+        // looks in .temp for the next available list_#
+        // returns the available index
+
+        int i;
+        String path = tempDirec();
+
+        for (i = 1; i < 100 + 1; i++) {
+            File test = new File(path + "\\list_" + i + ".txt");
+
+            if (!test.exists()) {
+                break;
+            }
+        }
+
+        return i;
+    }
+
     public static boolean checkDateFormat(String date){
 
         // takes a string from a date input
@@ -102,6 +101,8 @@ public class CastedUtilityGeneral {
         StringBuilder year = new StringBuilder();
         StringBuilder month = new StringBuilder();
         StringBuilder day = new StringBuilder();
+
+        System.out.println(date);
 
         if(date.length() == 10){
 
