@@ -31,7 +31,7 @@ class ToDoTest {
             String date = "2021-11-11";
 
             try {
-                TaskToDoController.generateNewTask(tasks, title, description, date);
+                TaskToDoHandler.generateNewTask(tasks, title, description, date);
             } catch (Exception e) {
                 System.out.println("Failed.");
             }
@@ -54,7 +54,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, date, description, false);
 
-        boolean result = TaskToDoController.editDescription(item, new_description);
+        boolean result = TaskToDoHandler.editDescription(item, new_description);
 
         if (item.getDescription().equalsIgnoreCase(description)) {
             assertFalse(result);
@@ -114,7 +114,7 @@ class ToDoTest {
         String date = "2021-11-11";
 
         try {
-            TaskToDoController.generateNewTask(tasks, title, description, date);
+            TaskToDoHandler.generateNewTask(tasks, title, description, date);
         } catch (Exception e) {
             System.out.println("Failed.");
         }
@@ -137,14 +137,14 @@ class ToDoTest {
         String date = "2021-11-11";
 
         try {
-            TaskToDoController.generateNewTask(tasks, title, description, date);
-            TaskToDoController.generateNewTask(tasks, title, description, date);
+            TaskToDoHandler.generateNewTask(tasks, title, description, date);
+            TaskToDoHandler.generateNewTask(tasks, title, description, date);
         } catch (Exception e) {
             System.out.println("Failed.");
         }
 
         if (tasks.size() == 2) {
-            TaskToDoController.deleteTask(tasks, 1);
+            TaskToDoHandler.deleteTask(tasks, 1);
         } else {
             fail();
         }
@@ -167,7 +167,7 @@ class ToDoTest {
             String date = "2021-11-11";
 
             try {
-                TaskToDoController.generateNewTask(tasks, title, description, date);
+                TaskToDoHandler.generateNewTask(tasks, title, description, date);
             } catch (Exception e) {
                 System.out.println("Failed.");
             }
@@ -177,7 +177,7 @@ class ToDoTest {
             fail();
         }
 
-        TaskToDoController.clearList(tasks);
+        TaskToDoHandler.clearList(tasks);
 
         assertTrue(tasks.isEmpty());
     }
@@ -194,7 +194,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, description, date, false);
 
-        boolean change = TaskToDoController.editDescription(item, "no");
+        boolean change = TaskToDoHandler.editDescription(item, "no");
 
         if (change) {
             assertEquals("no", item.getDescription());
@@ -216,7 +216,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, description, date, false);
 
-        boolean change = TaskToDoController.editDate(item, "9999-01-01");
+        boolean change = TaskToDoHandler.editDate(item, "9999-01-01");
 
         if (change) {
             assertEquals("9999-01-01", item.getDate());
@@ -238,7 +238,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, description, date, false);
 
-        TaskToDoController.markAsComplete(item);
+        TaskToDoHandler.markAsComplete(item);
 
         assertTrue(item.isComplete());
     }
@@ -261,7 +261,7 @@ class ToDoTest {
         item.setComplete(true);
 
         if (item.isComplete()) {
-            TaskToDoController.markAsIncomplete(item);
+            TaskToDoHandler.markAsIncomplete(item);
         } else {
             fail();
         }
@@ -281,7 +281,7 @@ class ToDoTest {
 
         TaskToDoObj item = new TaskToDoObj(title, date, description, false);
 
-        String actual = TaskToDoController.displayTask(item);
+        String actual = TaskToDoHandler.displayTask(item);
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
@@ -307,7 +307,7 @@ class ToDoTest {
 
         item.setComplete(true);
 
-        String actual = TaskToDoController.displayCompleted(item, item.isComplete());
+        String actual = TaskToDoHandler.displayCompleted(item, item.isComplete());
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
@@ -333,7 +333,7 @@ class ToDoTest {
 
         item.setComplete(false);
 
-        String actual = TaskToDoController.displayIncomplete(item, item.isComplete());
+        String actual = TaskToDoHandler.displayIncomplete(item, item.isComplete());
 
         String expected = item.getName() + "                                                       " + item.getDescription() + "                                                                                                                   " + item.getDate();
 
@@ -370,7 +370,7 @@ class ToDoTest {
             String date = "2021-11-11";
 
             try {
-                TaskToDoController.generateNewTask(tasks, title, description, date);
+                TaskToDoHandler.generateNewTask(tasks, title, description, date);
             } catch (Exception e) {
                 System.out.println("Failed.");
             }
@@ -404,7 +404,7 @@ class ToDoTest {
         scanner.close();
 
         File test_file = new File(test_file_path);
-        String file_name = ListToDoController.formatFile(test_file, index);
+        String file_name = ListToDoHandler.formatFile(test_file, index);
 
         if (!file_name.equalsIgnoreCase(expected_name)) {
             fail();

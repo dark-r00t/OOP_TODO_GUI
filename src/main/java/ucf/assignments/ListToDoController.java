@@ -7,10 +7,7 @@ package ucf.assignments;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -27,6 +24,7 @@ public class ListToDoController {
     public static ListToDoObj temp;
     public ObservableList<ListToDoObj> selected;
     public LinkedList<ListToDoObj> allItems = new LinkedList<>();
+    public Button helpMenuButton;
 
     @FXML
     public void addNewToDoButton() throws IOException {
@@ -141,13 +139,21 @@ public class ListToDoController {
 
         removeFile(pass.getIndex());
 
-        if (pass.getIndex() != allItems.size()) {
-            updateIndex(pass.getIndex());
-            pass.setIndex(pass.getIndex() - 1);
+        try {
+            if (pass.getIndex() != allItems.size()) {
+                ListToDoHandler.updateFileName(pass.getIndex(), allItems.size());
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to update file names.");
         }
 
-        allItems.remove(pass.getIndex() - 1);
-        todoList.getItems().remove(pass.getIndex() - 1);
+        try {
+            allItems.remove(pass.getIndex() - 1);
+            todoList.getItems().remove(pass.getIndex() - 1);
+            ListToDoHandler.updateIndex(allItems);
+        } catch (Exception e) {
+            System.out.println("Failed to remove item from list.");
+        }
     }
 
     public void removeFile(int txt) {
@@ -191,7 +197,7 @@ public class ListToDoController {
         try {
             Files.copy(oldFile.toPath(), newFile.toPath());
         } catch (Exception e) {
-            System.out.println("Failed to update index.");
+            System.out.println("Failed copying files..");
         }
     }
 
@@ -244,36 +250,13 @@ public class ListToDoController {
 
             for (File file : selectedFile) {
                 int index = allItems.size() + 1;
-                String file_name = formatFile(file, index);
+                String file_name = ListToDoHandler.formatFile(file, index);
                 addItem(file_name);
                 allItems.get(index - 1).setIndex(index);
             }
         } catch (Exception e) {
             System.out.print("");
         }
-    }
-
-    public static String formatFile(File selectedFile, int index) throws IOException {
-        // takes a file
-        // reads the first line in file (name of the to-do list)
-        // - stores into an available list_#.txt
-        // - adds name of list to the display
-        // - adds item into the linkedList of objects
-        // writes every line afterwards into the file
-
-        Scanner file = new Scanner(selectedFile);
-        String name = file.nextLine();
-
-        FileWriter fw = new FileWriter(CastedUtilityGeneral.tempDirec() + "\\list_" + index + ".txt");
-        fw.write(name + "\n");
-
-        while (file.hasNextLine()) {
-            fw.write(file.nextLine() + "\n");
-        }
-
-        fw.close();
-
-        return name;
     }
 
     public void storeData(ListToDoObj item) throws IOException {
@@ -325,29 +308,8 @@ public class ListToDoController {
             reader.close();
             writer.close();
         }
+
         item.setIndex(index);
-    }
-
-    public void updateIndex(int index) {
-        // takes in a file index
-        // loop for as many items are in the linked list
-        // set i = file index
-        // create a file with desired index and the actual index
-        // rename file so it matches desired output
-
-        for (int i = index; i < allItems.size(); i++) {
-
-            File newFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + (i + 1) + ".txt");
-            File oldFile = new File(CastedUtilityGeneral.tempDirec() + "\\list_" + (i) + ".txt");
-
-            try {
-                if (newFile.renameTo(oldFile)) {
-                    System.out.print("");
-                }
-            } catch (Exception e) {
-                System.out.println("Failed to update index.");
-            }
-        }
     }
 
 }

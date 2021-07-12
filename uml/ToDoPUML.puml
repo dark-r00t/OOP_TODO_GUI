@@ -59,9 +59,14 @@ class ListToDoController {
     + selectToDo(ListToDoObj item)
     + saveSelectedList(ListToDoObj item)
     + loadListFile() throws IOException
-    + formatFile(File selectedFile)
     + storeData(ListToDoObj item)
-    + updateIndex(int index)
+}
+
+class ListToDoHandler {
+
+    + formatFile(File selectedFile, int index)
+    + updateFileName(int index, int size)
+    + updateIndex(LinkedList<ListToDoObj> every_item)
 }
 
 class ListToDoObj {
@@ -121,22 +126,26 @@ class TaskToDoController {
     --
     + displayAll()
     + removeAll()
-    + displayCompleted(TaskToDoObj task, boolean status)
-    + displayIncomplete(TaskToDoObj task, boolean status)
-    + markAsComplete(TaskToDoObj item)
-    + markAsIncomplete(TaskToDoObj item)
     + addNewTask(String title, String description, String date)
-    + generateNewTask(String title, String description, String date, boolean complete)
     + deleteTaskStart(String taskToDelete)
-    + deleteTask(LinkedList<TaskToDoObj> list, int i)
-    + editDescription(TaskToDoObj item)
-    + editDate(TaskToDoObj item)
-    + clearList(LinkedList<TaskToDoObj> list)
-    + generalDisplaySetup(TaskToDoObj task)
     + getTypedTitle()
     + getTypedDate()
     + getTypedDescription()
     + refreshDisplay()
+}
+
+class TaskToDoHandler {
+    + displayTask(TaskToDoObj task)
+    + displayCompleted(TaskToDoObj task, boolean status)
+    + displayIncomplete(TaskToDoObj task, boolean status)
+    + markAsComplete(TaskToDoObj item)
+    + markAsIncomplete(TaskToDoObj item)
+    + generateNewTask(LinkedList<TaskToDoObj> list, String title, String description, String date)
+    + deleteTask(LinkedList<TaskToDoObj> list, int i)
+    + editDescription(TaskToDoObj item, String newDescription)
+    + editDate(TaskToDoObj item, String newDate)
+    + clearList(LinkedList<TaskToDoObj> list)
+    + generalDisplaySetup(TaskToDoObj task)
 }
 
 class TaskToDoObj {
@@ -157,18 +166,19 @@ class TaskToDoObj {
 }
 
 ToDo -|> openjfx.Application
-
 ToDo -- ListToDoController
+
 ListToDoController --- FileHandler
 ListToDoController --- CastedUtilityGeneral
-ListToDoController - ListToDoObj
+ListToDoController - SceneController
+ListToDoObj - ListToDoController
+ListToDoHandler - ListToDoController
 
 TaskToDoController --- FileHandler
 TaskToDoController --- CastedUtilityGeneral
-TaskToDoController - TaskToDoObj
-
-ListToDoController - SceneController
 TaskToDoController - SceneController
+TaskToDoController - TaskToDoHandler
+TaskToDoController - TaskToDoObj
 
 SceneController --> ListToDoController
 SceneController --> TaskToDoController
