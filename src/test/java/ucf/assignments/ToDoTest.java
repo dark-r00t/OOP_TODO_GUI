@@ -356,7 +356,9 @@ class ToDoTest {
         CastedUtilityGeneral.addToDoSaveFolder();
         CastedUtilityGeneral.createTempFolder();
 
-        File savedOutput = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_999.txt");
+        String path = System.getProperty("user.dir") + "\\ToDo_Files\\save_999.txt";
+
+        File savedOutput = new File(path);
 
         FileWriter fw = new FileWriter(savedOutput);
 
@@ -374,7 +376,7 @@ class ToDoTest {
             }
         }
 
-        String output = FileHandler.saveTaskData(tasks);
+        String output = FileHandler.saveTaskData(tasks, path);
 
         fw.write(output);
         fw.close();

@@ -3,7 +3,6 @@
  *  Copyright 2021 Jan Darge
  */
 
-
 package ucf.assignments;
 
 import java.io.*;
@@ -21,7 +20,7 @@ public class FileHandler {
         LinkedList<TaskToDoObj> tasks = new LinkedList<>();
 
         try {
-            File selected = new File(System.getProperty("user.dir") + "\\.temp\\selected.txt");
+            File selected = new File(CastedUtilityGeneral.tempDirec() + "\\selected.txt");
             Scanner scanner = new Scanner(selected);
 
             scanner.nextLine();
@@ -70,6 +69,69 @@ public class FileHandler {
         fileSelectedGenerator(output.toString());
     }
 
+    public static String saveTaskData(LinkedList<TaskToDoObj> list, String selected_path) {
+        // takes in a list of items
+        // try to compile all the contents with in the list of items linked list into a single string
+        // replace back to back newlines with a single newline for as long as there is a back to back new line
+        // remove additional new line from the file
+        // return compounded string
+
+        try {
+            StringBuilder content = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(selected_path));
+            String list_title = br.readLine();
+
+            content.append(list_title).append("\n");
+
+            for (TaskToDoObj list_item : list) {
+                content.append(list_item.getName()).append("\n").append(list_item.getDate()).append("\n").append(list_item.getDescription()).append("\n").append(list_item.isComplete()).append("\n");
+            }
+
+            String output = content.toString();
+
+            while (output.contains("\n\n")) {
+                output = output.replace("\n\n", "\n");
+            }
+
+            output = output.substring(0, output.length() - 1);
+
+            return output;
+        } catch (IOException e) {
+            System.out.println("Failed to add additional tasks to the save file.");
+        }
+
+        return "";
+    }
+
+    public static void removeExtraNewLine(File file, String path) throws IOException {
+        // takes a file and a file path
+        // scans each line and compounds it into a string
+        // replaces each back to back new line with a single newline
+        // removes last line from the last character from the file
+        // writes new content into in given file using the file path
+
+        StringBuilder content = new StringBuilder();
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            content.append(scanner.nextLine()).append("\n");
+        }
+
+        String output = content.toString();
+
+        while (output.contains("\n\n")) {
+            output = output.replace("\n\n", "\n");
+        }
+
+        output = output.substring(0, output.length() - 1);
+
+        File updatedFile = new File(path);
+        FileWriter fw = new FileWriter(updatedFile);
+
+        fw.write(output);
+        fw.close();
+    }
+
     private static String readSelectedFile() throws FileNotFoundException {
         // reads the data provided inside of the selected.txt
         // returns all data as a string
@@ -111,70 +173,6 @@ public class FileHandler {
         }
 
         return fileContent;
-    }
-
-    public static String saveTaskData(LinkedList<TaskToDoObj> list) {
-        // takes in a list of items
-        // try to compile all the contents with in the list of items linked list into a single string
-        // replace back to back newlines with a single newline for as long as there is a back to back new line
-        // remove additional new line from the file
-        // return compounded string
-
-        try {
-            StringBuilder content = new StringBuilder();
-            String selected_path = CastedUtilityGeneral.tempDirec() + "\\selected.txt";
-            BufferedReader br = new BufferedReader(new FileReader(selected_path));
-            String list_title = br.readLine();
-
-            content.append(list_title).append("\n");
-
-            for (TaskToDoObj list_item : list) {
-                content.append(list_item.getName()).append("\n").append(list_item.getDate()).append("\n").append(list_item.getDescription()).append("\n").append(list_item.isComplete()).append("\n");
-            }
-
-            String output = content.toString();
-
-            while (output.contains("\n\n")) {
-                output = output.replace("\n\n", "\n");
-            }
-
-            output = output.substring(0, output.length() - 1);
-
-            return output;
-        } catch (IOException e) {
-            System.out.println("Failed to add additional tasks to the save file.");
-        }
-
-        return "";
-    }
-
-    public static void removeExtraNewLine(File file, String path) throws IOException {
-        // takes a file and a file path
-        // scans each line and compounds it into a string
-        // replaces each back to back new line with a single newline
-        // removes last line from the last character from the file
-        // writes new content into in given file using the file path
-
-        StringBuilder content = new StringBuilder();
-        Scanner scanner = new Scanner(file);
-
-        while(scanner.hasNextLine()){
-            content.append(scanner.nextLine()).append("\n");
-        }
-
-        String output = content.toString();
-
-        while (output.contains("\n\n")) {
-            output = output.replace("\n\n", "\n");
-        }
-
-        output = output.substring(0, output.length() - 1);
-
-        File updatedFile = new File(path);
-        FileWriter fw = new FileWriter(updatedFile);
-
-        fw.write(output);
-        fw.close();
     }
 
 }

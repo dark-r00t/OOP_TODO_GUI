@@ -212,11 +212,13 @@ public class TaskToDoController {
         // opens save popup to display name of saved file and the path
         // break to stop loop (index to save was already found at this point)
 
+        String selected_direc = CastedUtilityGeneral.tempDirec() + "\\selected.txt";
+
         for (int i = 1; ; i++) {
             if (!new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt").isFile()) {
                 File newFile = new File(System.getProperty("user.dir") + "\\ToDo_Files\\save_" + i + ".txt");
                 FileWriter fw = new FileWriter(newFile);
-                String output = FileHandler.saveTaskData(tasks);
+                String output = FileHandler.saveTaskData(tasks, selected_direc);
 
                 fw.write(output);
                 fw.close();
@@ -368,18 +370,13 @@ public class TaskToDoController {
 
     public static String generateNewTask(LinkedList<TaskToDoObj> list, String title, String description, String date) {
         // takes in a list of items
-        // try to make a new object using the other provided data
+        // make a new object using the other provided data
         // add the new item to the list
         // return the result of generalDisplaySetup using the new item
 
-        try {
-            TaskToDoObj item = new TaskToDoObj(title, date, description, false);
-            list.add(item);
-            return generalDisplaySetup(item);
-        } catch (Exception e) {
-            System.out.println("Error displaying new item.");
-        }
-        return "";
+        TaskToDoObj item = new TaskToDoObj(title, date, description, false);
+        list.add(item);
+        return generalDisplaySetup(item);
     }
 
     public void deleteTaskStart(String taskToDelete) {

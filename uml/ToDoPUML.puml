@@ -18,6 +18,8 @@ class FileHandler {
     + tasks()
     + renewFileAfterDelete(TaskToDoObj)
     + writeHeader()
+    + saveTaskData(LinkedList<TaskToDoObj> list, String selected_path)
+    + removeExtraNewLine(File file, String path)
     --
     - readSelectedFile()
     - fileSelectedGenerator()
@@ -98,7 +100,7 @@ class TaskToDoController {
     + TextField updateTaskTextBox
     + ListView<String> taskList
     + ObservableList<String> selected
-    + static LinkedList<TaskToDoObj> tasks
+    + LinkedList<TaskToDoObj> tasks
     --
     @FXML
     + listClicked()
@@ -107,8 +109,8 @@ class TaskToDoController {
     + displayIncompleteTasksButton()
     + markAsCompleteButton()
     + markAsIncompleteButton()
-    + deleteTaskButton()
     + addNewTaskButton()
+    + deleteTaskButton()
     + editDescription()
     + changeDate()
     + saveAllToDoButton()
@@ -119,20 +121,22 @@ class TaskToDoController {
     --
     + displayAll()
     + removeAll()
-    + displayCompleted(TaskToDoObj task)
-    + displayIncomplete(TaskToDoObj task)
+    + displayCompleted(TaskToDoObj task, boolean status)
+    + displayIncomplete(TaskToDoObj task, boolean status)
     + markAsComplete(TaskToDoObj item)
     + markAsIncomplete(TaskToDoObj item)
-    + deleteTask(String taskToDelete)
     + addNewTask(String title, String description, String date)
     + generateNewTask(String title, String description, String date, boolean complete)
+    + deleteTaskStart(String taskToDelete)
+    + deleteTask(LinkedList<TaskToDoObj> list, int i)
     + editDescription(TaskToDoObj item)
-    + changeDate(TaskToDoObj item)
-    + save(int i)
+    + editDate(TaskToDoObj item)
+    + clearList(LinkedList<TaskToDoObj> list)
     + generalDisplaySetup(TaskToDoObj task)
     + getTypedTitle()
     + getTypedDate()
     + getTypedDescription()
+    + refreshDisplay()
 }
 
 class TaskToDoObj {

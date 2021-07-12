@@ -101,7 +101,7 @@ public class ListToDoController {
     }
 
     @FXML
-    public void loadList() throws IOException {
+    public void loadList() {
         // calls loadListFile()
 
         loadListFile();
@@ -225,7 +225,7 @@ public class ListToDoController {
         }
     }
 
-    public void loadListFile() throws IOException {
+    public void loadListFile() {
         // sets up initial file direc
         // takes in multiple files if need be
         // for every file selected format file using formatFile()
@@ -237,17 +237,20 @@ public class ListToDoController {
         String path = System.getProperty("user.dir");
         FileChooser fc = new FileChooser();
 
-        fc.setInitialDirectory(new File(path + "\\ToDo_Files"));
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File: ", "*.txt"));
+        try{
+            fc.setInitialDirectory(new File(path + "\\ToDo_Files"));
+            fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text File: ", "*.txt"));
+            List<File> selectedFile = fc.showOpenMultipleDialog(null);
 
-        List<File> selectedFile = fc.showOpenMultipleDialog(null);
-        for (File file : selectedFile) {
-            int index = allItems.size() + 1;
-            String file_name = formatFile(file, index);
-            addItem(file_name);
-            allItems.get(index - 1).setIndex(index);
+            for (File file : selectedFile) {
+                int index = allItems.size() + 1;
+                String file_name = formatFile(file, index);
+                addItem(file_name);
+                allItems.get(index - 1).setIndex(index);
+            }
+        } catch (Exception e) {
+            System.out.print("");
         }
-
     }
 
     public static String formatFile(File selectedFile, int index) throws IOException {
@@ -339,7 +342,7 @@ public class ListToDoController {
 
             try {
                 if (newFile.renameTo(oldFile)) {
-                    System.out.println("");
+                    System.out.print("");
                 }
             } catch (Exception e) {
                 System.out.println("Failed to update index.");

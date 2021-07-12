@@ -26,7 +26,6 @@ public class ToDo extends Application {
             // creates needed folders
             // removes all temp files if they are there
             // initial scene set up
-            // set the initial scene to ToDoMenu.fxml
 
             CastedUtilityGeneral.addToDoSaveFolder();
             CastedUtilityGeneral.removeTempFiles();
